@@ -1,6 +1,6 @@
 <script lang="ts">
 import {defineComponent, nextTick} from "vue";
-import {GraphUtil} from "@/utils/graph_util";
+import {GraphUtil} from "@/utils/graph-util";
 
 export default defineComponent({
   name: "HomeView",

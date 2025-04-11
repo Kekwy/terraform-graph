@@ -12,7 +12,7 @@ import initAntd from "@/antd";
 initAntd()
 
 // antv x6 node
-import {registerAwsNodeTypes} from "@/utils/node_util";
+import {registerAwsNodeTypes} from "@/utils/node-util";
 
 registerAwsNodeTypes()
 
