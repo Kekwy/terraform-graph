@@ -11,10 +11,12 @@ export default {
 </template>
 
 
-<style>
+<style scoped>
 :root {
   --header-height: 55px;
   --nav-height: 55px;
+  /*--graph-background: #F2F7FA;*/
+  --graph-background: #FFF;
   /*--text-color: var(--el-text-color-primary);
   --brand-color: var(--el-color-primary);*/
 }
@@ -23,20 +25,16 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /* text-align: center; */
   color: #2c3e50;
+  width: 100vw; /* 全屏宽度 */
+  height: 100vh; /* 全屏高度 */
 }
 
 body, html {
   overflow: hidden;
   margin: 0;
+  padding: 0;
 }
 
-
-.editor {
-  width: 100vw; /* 全屏宽度 */
-  height: 100vh; /* 全屏高度 */
-  margin: 0 0;
-  padding: 0 0;
-}
 </style>
