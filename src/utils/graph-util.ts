@@ -4,6 +4,7 @@ import {History} from "@antv/x6-plugin-history";
 import {Keyboard} from "@antv/x6-plugin-keyboard";
 import {Export} from "@antv/x6-plugin-export";
 import {Clipboard} from '@antv/x6-plugin-clipboard';
+import {STATE} from '@/store'
 
 export namespace GraphUtil {
 
@@ -352,7 +353,7 @@ export namespace GraphUtil {
   }
 
   const initStore = (graph: Graph) => {
-    // globalStore.graph = graph;
+    STATE.graph = graph;
     // globalStore.clearSelectedNode();
     // globalStore.selectedColumns = new Map<string, Node>();
     // globalStore.count = 0;

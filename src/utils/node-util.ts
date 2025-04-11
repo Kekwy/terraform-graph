@@ -9,6 +9,7 @@ import {TfOutput} from "@/node/tf-output";
 import {TfResource} from "@/node/tf-resource";
 import {TfVariable} from "@/node/tf-variable";
 
+// TODO: 自动扫描目录下的类型
 const nodeTypes: NodeType[] = [
   TfCore.TYPE,
   TfData.TYPE,

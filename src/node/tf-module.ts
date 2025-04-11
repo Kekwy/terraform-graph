@@ -1,6 +1,9 @@
 import {NodeType} from "@/node/node-type";
 
 export class TfModule extends NodeType {
+
+
+
   static readonly TYPE: NodeType = {
     name: 'tf-module',
     conf: {

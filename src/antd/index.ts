@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import {Button, Layout, Menu, Breadcrumb, Icon} from "ant-design-vue";
+import {Button, Layout, Menu, Breadcrumb, Icon, Collapse, List} from "ant-design-vue";
 
 const initAntd = () => {
     Vue.component('AButton', Button)
@@ -13,6 +13,10 @@ const initAntd = () => {
     Vue.component('ABreadcrumb', Breadcrumb)
     Vue.component('ABreadcrumbItem', Breadcrumb.Item)
     Vue.component('AIcon', Icon)
+    Vue.component('ACollapse', Collapse)
+    Vue.component('ACollapsePanel', Collapse.Panel)
+    Vue.component('AList', List)
+    Vue.component('AListItem', List.Item)
 }
 
 export default initAntd
