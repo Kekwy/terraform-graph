@@ -1,4 +1,4 @@
-import {Graph, Node, Shape} from "@antv/x6";
+import {Graph, Node, Platform} from "@antv/x6";
 import {Selection} from "@antv/x6-plugin-selection";
 import {History} from "@antv/x6-plugin-history";
 import {Keyboard} from "@antv/x6-plugin-keyboard";
@@ -74,7 +74,9 @@ export namespace GraphUtil {
         multiple: true,
         rubberband: true,
         movable: true,
-        showNodeSelectionBox: true,
+        rubberEdge: true,
+        rubberNode: true,
+        modifiers: 'shift',
       }),
       // 撤销、重做
       new History({
@@ -99,34 +101,67 @@ export namespace GraphUtil {
       container: container,
       // width: 100000,
       // height: 100000,
+      // width: '100%',
+      // height: '100%',
       autoResize: true,
       mousewheel: { // 画布缩放
         enabled: true,
         modifiers: ['ctrl'],
+        factor: 1.1,
+        maxScale: 1.5,
+        minScale: 0.5,
       },
       panning: {    // 画布平移
         enabled: true,
-        modifiers: ['ctrl'],
       },
-      connecting: {
-        router: {
-          name: 'er',
+      highlighting: {
+        magnetAdsorbed: {
+          name: 'stroke',
           args: {
-            offset: 25,
-            direction: 'H',
+            attrs: {
+              fill: '#fff',
+              stroke: '#31d0c6',
+              strokeWidth: 4,
+            },
           },
         },
+      },
+      connecting: {
+        snap: true,
         allowBlank: false,
+        allowLoop: false,
+        highlight: true,
+        sourceAnchor: {
+          name: 'left',
+          args: {
+            dx: Platform.IS_SAFARI ? 4 : 8,
+          },
+        },
+        targetAnchor: {
+          name: 'right',
+          args: {
+            dx: Platform.IS_SAFARI ? 4 : -8,
+          },
+        },
         createEdge() {
-          return new Shape.Edge({
+          return this.createEdge({
+            shape: 'data-processing-curve',
             attrs: {
               line: {
-                stroke: '#A2B1C3',
-                strokeWidth: 2,
-                strokeDasharray: '5,5',
+                strokeDasharray: '5 5',
               },
             },
+            zIndex: -1,
           })
+        },
+        // 连接桩校验
+        validateConnection({sourceMagnet, targetMagnet}) {
+          // 只能从输出链接桩创建连接
+          if (!sourceMagnet || sourceMagnet.getAttribute('port-group') === 'in') {
+            return false
+          }
+          // 只能连接到输入链接桩
+          return !(!targetMagnet || targetMagnet.getAttribute('port-group') !== 'in');
         },
       },
       background: {
@@ -198,19 +233,19 @@ export namespace GraphUtil {
     // });
     // 监听节点选中事件，处理框选
     graph.on('selection:changed', ({selected}) => {
-      let nodeCount = 0;
-      let selectedNode: Node = null as any;
-      selected.forEach((cell) => {
-        if (cell.isNode()) {
-          nodeCount++;
-          selectedNode = cell as Node;
-        }
-      });
-      if (nodeCount === 1) { // 只选中了单个结点
-        // eventBus.emit(EVENT_NODE_SELECTED, selectedNode); // 通过事件总线向其他组件传递事件
-      } else {              // 处理框选的情况
-        // eventBus.emit(EVENT_NODE_UNSELECTED);             // 隐藏详情栏
-      }
+      // let nodeCount = 0;
+      // let selectedNode: Node = null as any;
+      // selected.forEach((cell) => {
+      //   if (cell.isNode()) {
+      //     nodeCount++;
+      //     selectedNode = cell as Node;
+      //   }
+      // });
+      // if (nodeCount === 1) { // 只选中了单个结点
+      //   // eventBus.emit(EVENT_NODE_SELECTED, selectedNode); // 通过事件总线向其他组件传递事件
+      // } else {              // 处理框选的情况
+      //   // eventBus.emit(EVENT_NODE_UNSELECTED);             // 隐藏详情栏
+      // }
     });
     // // 监听节点取消选中事件，清除右边栏信息
     // graph.on('node:unselected', () => {

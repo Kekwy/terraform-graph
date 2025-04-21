@@ -111,10 +111,10 @@ export default defineComponent({
 
     <div class="plus-dag" v-if="type !== NodeType.OUTPUT">
       <a-dropdown
-          placement="bottom"
+          placement="bottomCenter"
           :open="plusActionSelected"
           @openChange="onPlusDropdownOpenChange"
-          trigger="click"
+          :trigger="['click']"
           overlayClassName="processing-node-menu"
       >
         <template #overlay>

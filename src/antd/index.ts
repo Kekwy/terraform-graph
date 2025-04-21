@@ -1,5 +1,18 @@
 import Vue from 'vue'
-import {Breadcrumb, Button, Collapse, Dropdown, Icon, Layout, List, Menu, Tooltip} from "ant-design-vue";
+import {
+  Breadcrumb,
+  Button,
+  Collapse,
+  Dropdown,
+  Icon,
+  Layout,
+  List,
+  Menu,
+  Select,
+  Tabs,
+  Tag,
+  Tooltip
+} from "ant-design-vue";
 
 const initAntd = () => {
   Vue.component('AButton', Button)
@@ -19,6 +32,16 @@ const initAntd = () => {
   Vue.component('AListItem', List.Item)
   Vue.component('ADropdown', Dropdown)
   Vue.component('ATooltip', Tooltip)
+  // a-select
+  Vue.component('ASelect', Select)
+  Vue.component('ASelectOption', Select.Option)
+  // a-tabs
+  Vue.component('ATabs', Tabs)
+  Vue.component('ATabPane', Tabs.TabPane)
+  // a-tag
+  Vue.component('ATag', Tag)
+
+
 }
 
 export default initAntd
