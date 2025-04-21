@@ -16,6 +16,7 @@
     "@antv/x6-plugin-keyboard": "^2.2.3",
     "@antv/x6-plugin-minimap": "^2.0.7",
     "@antv/x6-plugin-selection": "^2.2.2",
+    "@antv/x6-vue-shape": "^2.1.2",
     "ant-design-vue": "^1.7.8",
     "core-js": "^3.8.3",
     "mitt": "^3.0.1",

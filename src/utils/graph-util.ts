@@ -1,4 +1,4 @@
-import {DataUri, Graph, Node, Shape} from "@antv/x6";
+import {Graph, Node, Shape} from "@antv/x6";
 import {Selection} from "@antv/x6-plugin-selection";
 import {History} from "@antv/x6-plugin-history";
 import {Keyboard} from "@antv/x6-plugin-keyboard";
@@ -362,12 +362,13 @@ export namespace GraphUtil {
     // globalStore.setSaving(false);
   }
 
-  export function initGraph(container: HTMLElement) {
+  export function initGraph(container: HTMLElement): Graph {
     const graph = createGraph(container);
     initPlugins(graph);
     initKeyHandlers(graph);
     initEventHandlers(graph);
     initStore(graph);
+    return graph;
   }
 
 }

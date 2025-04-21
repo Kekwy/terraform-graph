@@ -1,4 +1,6 @@
-import {Graph, Node, StringExt} from "@antv/x6";
+import {Edge, Graph, Node, Path, StringExt} from "@antv/x6";
+import DeploymentDagNode from "@/components/DeploymentDagNode.vue";
+import {register} from "@antv/x6-vue-shape";
 
 // 节点类型
 export enum NodeType {
@@ -26,41 +28,43 @@ export interface Position {
 // 加工类型列表
 export const PROCESSING_TYPE_LIST = [
   {
-    type: 'FILTER',
+    type: NodeType.FILTER,
     name: '数据筛选',
   },
   {
-    type: 'JOIN',
+    type: NodeType.JOIN,
     name: '数据连接',
   },
   {
-    type: 'UNION',
+    type: NodeType.UNION,
     name: '数据合并',
   },
   {
-    type: 'AGG',
+    type: NodeType.AGG,
     name: '数据聚合',
   },
 
   {
-    type: 'OUTPUT',
+    type: NodeType.OUTPUT,
     name: '数据输出',
   },
 ]
 
 // 不同节点类型的icon
-export const NODE_TYPE_LOGO = {
-  INPUT:
-    'https://mdn.alipayobjects.com/huamei_f4t1bn/afts/img/A*RXnuTpQ22xkAAAAAAAAAAAAADtOHAQ/original', // 数据输入
-  FILTER:
-    'https://mdn.alipayobjects.com/huamei_f4t1bn/afts/img/A*ZJ6qToit8P4AAAAAAAAAAAAADtOHAQ/original', // 数据筛选
-  JOIN: 'https://mdn.alipayobjects.com/huamei_f4t1bn/afts/img/A*EHqyQoDeBvIAAAAAAAAAAAAADtOHAQ/original', // 数据连接
-  UNION:
-    'https://mdn.alipayobjects.com/huamei_f4t1bn/afts/img/A*k4eyRaXv8gsAAAAAAAAAAAAADtOHAQ/original', // 数据合并
-  AGG: 'https://mdn.alipayobjects.com/huamei_f4t1bn/afts/img/A*TKG8R6nfYiAAAAAAAAAAAAAADtOHAQ/original', // 数据聚合
-  OUTPUT:
-    'https://mdn.alipayobjects.com/huamei_f4t1bn/afts/img/A*zUgORbGg1HIAAAAAAAAAAAAADtOHAQ/original', // 数据输出
-}
+export const NODE_TYPE_LOGO: Map<NodeType, string> = new Map<NodeType, string>([
+  [NodeType.INPUT,
+    'https://mdn.alipayobjects.com/huamei_f4t1bn/afts/img/A*RXnuTpQ22xkAAAAAAAAAAAAADtOHAQ/original'], // 数据输入
+  [NodeType.FILTER,
+    'https://mdn.alipayobjects.com/huamei_f4t1bn/afts/img/A*ZJ6qToit8P4AAAAAAAAAAAAADtOHAQ/original'], // 数据筛选
+  [NodeType.JOIN,
+    'https://mdn.alipayobjects.com/huamei_f4t1bn/afts/img/A*EHqyQoDeBvIAAAAAAAAAAAAADtOHAQ/original'], // 数据连接
+  [NodeType.UNION,
+    'https://mdn.alipayobjects.com/huamei_f4t1bn/afts/img/A*k4eyRaXv8gsAAAAAAAAAAAAADtOHAQ/original'], // 数据合并
+  [NodeType.AGG,
+    'https://mdn.alipayobjects.com/huamei_f4t1bn/afts/img/A*TKG8R6nfYiAAAAAAAAAAAAAADtOHAQ/original'], // 数据聚合
+  [NodeType.OUTPUT,
+    'https://mdn.alipayobjects.com/huamei_f4t1bn/afts/img/A*zUgORbGg1HIAAAAAAAAAAAAADtOHAQ/original'], // 数据输出
+]);
 
 /**
  * 根据起点初始下游节点的位置信息
@@ -207,4 +211,128 @@ export const createEdge = (source: string, target: string, graph: Graph) => {
   if (graph) {
     graph.addEdge(edge)
   }
+}
+
+export const registerShapeType = () => {
+  register({
+    shape: "data-processing-dag-node",
+    width: 212,
+    height: 48,
+    component: DeploymentDagNode,
+    // port默认不可见
+    ports: {
+      groups: {
+        in: {
+          position: 'left',
+          attrs: {
+            circle: {
+              r: 4,
+              magnet: true,
+              stroke: 'transparent',
+              strokeWidth: 1,
+              fill: 'transparent',
+            },
+          },
+        },
+
+        out: {
+          position: {
+            name: 'right',
+            args: {
+              dx: -32,
+            },
+          },
+
+          attrs: {
+            circle: {
+              r: 4,
+              magnet: true,
+              stroke: 'transparent',
+              strokeWidth: 1,
+              fill: 'transparent',
+            },
+          },
+        },
+      },
+    },
+  })
+
+  // 注册连线
+  Graph.registerConnector(
+    'curveConnector',
+    (sourcePoint, targetPoint) => {
+      const hgap = Math.abs(targetPoint.x - sourcePoint.x)
+      const path = new Path()
+      path.appendSegment(
+        Path.createSegment('M', sourcePoint.x - 4, sourcePoint.y),
+      )
+      path.appendSegment(
+        Path.createSegment('L', sourcePoint.x + 12, sourcePoint.y),
+      )
+      // 水平三阶贝塞尔曲线
+      path.appendSegment(
+        Path.createSegment(
+          'C',
+          sourcePoint.x < targetPoint.x
+            ? sourcePoint.x + hgap / 2
+            : sourcePoint.x - hgap / 2,
+          sourcePoint.y,
+          sourcePoint.x < targetPoint.x
+            ? targetPoint.x - hgap / 2
+            : targetPoint.x + hgap / 2,
+          targetPoint.y,
+          targetPoint.x - 6,
+          targetPoint.y,
+        ),
+      )
+      path.appendSegment(
+        Path.createSegment('L', targetPoint.x + 2, targetPoint.y),
+      )
+
+      return path.serialize()
+    },
+    true,
+  )
+
+  Edge.config({
+    markup: [
+      {
+        tagName: 'path',
+        selector: 'wrap',
+        attrs: {
+          fill: 'none',
+          cursor: 'pointer',
+          stroke: 'transparent',
+          strokeLinecap: 'round',
+        },
+      },
+      {
+        tagName: 'path',
+        selector: 'line',
+        attrs: {
+          fill: 'none',
+          pointerEvents: 'none',
+        },
+      },
+    ],
+    connector: {name: 'curveConnector'},
+    attrs: {
+      wrap: {
+        connection: true,
+        strokeWidth: 10,
+        strokeLinejoin: 'round',
+      },
+      line: {
+        connection: true,
+        stroke: '#A2B1C3',
+        strokeWidth: 1,
+        targetMarker: {
+          name: 'classic',
+          size: 6,
+        },
+      },
+    },
+  })
+
+  Graph.registerEdge('data-processing-curve', Edge, true)
 }

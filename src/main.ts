@@ -16,6 +16,11 @@ import {registerAwsNodeTypes} from "@/utils/node-util";
 
 registerAwsNodeTypes()
 
+// register
+import {registerShapeType} from "@/node";
+
+registerShapeType()
+
 new Vue({
   router,
   render: h => h(App),
