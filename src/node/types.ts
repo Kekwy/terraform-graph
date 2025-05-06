@@ -1,5 +1,6 @@
 import {RedisProp} from "@/node/redis-props";
 import {MySQLProp} from "@/node/mysql-props";
+import {CellStatus} from "@/node/index";
 
 export enum NodeType {
   REDIS = "redis",
@@ -17,8 +18,11 @@ export interface NodeData {
   module: any;
   name: string;
   fixed_value: Set<string>;
-  text: any;
+  text: {
+    [key: string]: string
+  };
   type: NodeType;
+  status: CellStatus;
 }
 
 export const nodes = new Map<NodeType, NodeProp>([

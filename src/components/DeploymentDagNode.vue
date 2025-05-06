@@ -10,6 +10,7 @@ import {
   NodeType,
   PROCESSING_TYPE_LIST
 } from '@/node'
+import {NodeProp, nodes} from "@/node/types";
 
 export default defineComponent({
   name: 'DeploymentDagNode',
@@ -18,7 +19,7 @@ export default defineComponent({
   beforeMount() {
     this.node = (this as any).getNode();
     this.data = this.node.getData();
-    this.node.on('change:data', ({ current }) => {
+    this.node.on('change:data', ({current}) => {
       this.data = current
     })
     console.log(this.node)
@@ -62,6 +63,8 @@ export default defineComponent({
   computed: {
     name() {
       return (this.node as Node).getData().name;
+    }, nodes() {
+      return nodes
     }, NodeType() {
       return NodeType
     }, CellStatus() {
@@ -78,6 +81,9 @@ export default defineComponent({
     statusMsg() {
       return this.data.statusMsg;
     },
+    iconUrl() {
+      return (nodes.get(this.type) as NodeProp).icon;
+    }
   },
   data() {
     return {
@@ -90,10 +96,10 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="data-processing-dag-node">
+  <div class="deployment-dag-node">
     <div class="main-area" @mouseenter="onMainMouseEnter" @mouseleave="onMainMouseLeave">
       <div class="main-info">
-        <i class="node-logo" :style="{ backgroundImage: `url(${NODE_TYPE_LOGO.get(type)})` }"/>
+        <i class="node-logo" :style="{ backgroundImage: `url(${iconUrl})` }"/>
         <a-tooltip :title="name" :mouseEnterDelay="0.8">
           <div class="ellipsis-row node-name">{{ name }}</div>
         </a-tooltip>
@@ -119,15 +125,15 @@ export default defineComponent({
       >
         <template #overlay>
           <ul>
-            <li
-                class="each-sub-menu"
-                v-for="item in PROCESSING_TYPE_LIST()"
-                :key="item.type"
-                @click="clickPlusDragMenu(item.type)"
-            >
-              <i class="node-mini-logo" :style="{ backgroundImage: `url(${NODE_TYPE_LOGO.get(item.type)})` }"/>
-              <span>{{ item.name }}</span>
-            </li>
+            <!--            <li-->
+            <!--                class="each-sub-menu"-->
+            <!--                v-for="item in PROCESSING_TYPE_LIST()"-->
+            <!--                :key="item.type"-->
+            <!--                @click="clickPlusDragMenu(item.type)"-->
+            <!--            >-->
+            <!--              <i class="node-mini-logo" :style="{ backgroundImage: `url(${NODE_TYPE_LOGO.get(item.type)})` }"/>-->
+            <!--              <span>{{ item.name }}</span>-->
+            <!--            </li>-->
           </ul>
         </template>
         <i :class="['plus-action', { 'plus-action-selected': plusActionSelected }]"/>
@@ -138,7 +144,7 @@ export default defineComponent({
 
 
 <style>
-.data-processing-dag-node {
+.deployment-dag-node {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -178,7 +184,7 @@ export default defineComponent({
 .node-name {
   overflow: hidden;
   display: inline-block;
-  width: 70px;
+  width: auto;
   margin-left: 6px;
   color: rgba(0, 0, 0, 65%);
   font-size: 12px;
@@ -209,7 +215,6 @@ export default defineComponent({
 }
 
 .more-action-container {
-  margin-left: 12px;
   width: 15px;
   height: 15px;
   text-align: center;

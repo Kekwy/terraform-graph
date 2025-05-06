@@ -148,6 +148,8 @@ export const getPortsByType = (type: NodeType, nodeId: string) => {
   return ports
 }
 
+
+
 /**
  * 创建节点并添加到画布
  * @param type 节点类型
@@ -172,7 +174,7 @@ export const createNode = (
   const id = StringExt.uuid()
   const node = {
     id,
-    shape: 'data-processing-dag-node',
+    shape: 'deployment-dag-node',
     x: position?.x,
     y: position?.y,
     ports: getPortsByType(type, id),
@@ -215,7 +217,7 @@ export const createEdge = (source: string, target: string, graph: Graph) => {
 
 export const registerShapeType = () => {
   register({
-    shape: "data-processing-dag-node",
+    shape: "deployment-dag-node",
     width: 212,
     height: 48,
     component: DeploymentDagNode,

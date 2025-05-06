@@ -1,6 +1,6 @@
 <script lang="ts">
 import {defineComponent} from "vue";
-import {EVENT_BUS, EVENTS} from "@/utils/event-bus";
+import {eventBus, EventEnum} from "@/utils/event-bus";
 import {Graph, Node} from "@antv/x6";
 import {Dnd} from "@antv/x6-plugin-dnd";
 
@@ -31,13 +31,13 @@ export default defineComponent({
   },
   mounted() {
     /* 初始化监听事件 */
-    EVENT_BUS.on(EVENTS.GRAPH_INITIATED, (graph) => {
+    eventBus.on(EventEnum.GRAPH_INITIATED, (graph) => {
       this.handleGraphInitiated(graph as Graph);
     });
   },
   beforeUnmount() {
     this.events.forEach((event: string) => {
-      EVENT_BUS.off(event);
+      eventBus.off(event);
     });
   },
   data() {
@@ -54,7 +54,7 @@ export default defineComponent({
         {shape: 'tf-core', label: 'Terraform'},
       ],
       events: [
-        EVENTS.GRAPH_INITIATED,
+        EventEnum.GRAPH_INITIATED,
       ],
       dnd: null as any,
       text: data

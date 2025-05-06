@@ -1,5 +1,6 @@
 import MySQLIcon from "@/assets/icons/mysql-logo-svgrepo-com.svg";
 import {NodeData, NodeProp, NodeType} from "@/node/types";
+import {CellStatus} from "@/node/index";
 
 export class MySQLProp implements NodeProp {
   readonly attrText = {         // 对应属性在配置栏中显示的名称
@@ -106,6 +107,7 @@ export class MySQLProp implements NodeProp {
       fixed_value: this.fixedValue,
       text: this.attrText,
       type: this.type,
+      status: CellStatus.DEFAULT
     };
   }
 }

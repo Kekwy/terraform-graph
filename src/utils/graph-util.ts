@@ -1,12 +1,63 @@
-import {Graph, Node, Platform} from "@antv/x6";
+import {Graph, Node, Platform, StringExt} from "@antv/x6";
 import {Selection} from "@antv/x6-plugin-selection";
 import {History} from "@antv/x6-plugin-history";
 import {Keyboard} from "@antv/x6-plugin-keyboard";
 import {Export} from "@antv/x6-plugin-export";
 import {Clipboard} from '@antv/x6-plugin-clipboard';
-import {STATE} from '@/store'
+import {globalVar} from '@/store'
+import {Position} from "@/node";
+import {NodeProp, NodeType} from "@/node/types";
+import {eventBus, EventEnum} from "@/utils/event-bus";
 
 export namespace GraphUtil {
+
+  // 根据节点的类型获取ports
+  export const getPortsByType = (type: NodeType, nodeId: string) => {
+    let ports = []
+    switch (type) {
+      default:
+        ports = [
+          {
+            id: `${nodeId}-in`,
+            group: 'in',
+          },
+          {
+            id: `${nodeId}-out`,
+            group: 'out',
+          },
+        ]
+        break
+    }
+    return ports
+  }
+
+  export const createTmpNode = (
+    prop: NodeProp,
+    graph: Graph,
+    position?: Position,
+  ): Node => {
+    if (!graph) {
+      return {} as Node
+    }
+    const type = prop.type;
+    const nodeData = prop.data();
+    const sameTypeNodes = graph
+      .getNodes()
+      .filter((item) => item.getData()?.type === type);
+    if (sameTypeNodes.length > 0) {
+      nodeData.name = `${nodeData.name}_${sameTypeNodes.length}`
+    }
+    const id = StringExt.uuid();
+    const nodeMetadata = {
+      id,
+      shape: 'deployment-dag-node',
+      x: position?.x,
+      y: position?.y,
+      ports: getPortsByType(type, id),
+      data: nodeData,
+    }
+    return graph.createNode(nodeMetadata);
+  }
 
   export function disposeGraph(graph: Graph) {
     graph.dispose();
@@ -233,19 +284,19 @@ export namespace GraphUtil {
     // });
     // 监听节点选中事件，处理框选
     graph.on('selection:changed', ({selected}) => {
-      // let nodeCount = 0;
-      // let selectedNode: Node = null as any;
-      // selected.forEach((cell) => {
-      //   if (cell.isNode()) {
-      //     nodeCount++;
-      //     selectedNode = cell as Node;
-      //   }
-      // });
-      // if (nodeCount === 1) { // 只选中了单个结点
-      //   // eventBus.emit(EVENT_NODE_SELECTED, selectedNode); // 通过事件总线向其他组件传递事件
-      // } else {              // 处理框选的情况
-      //   // eventBus.emit(EVENT_NODE_UNSELECTED);             // 隐藏详情栏
-      // }
+      let nodeCount = 0;
+      let selectedNode: Node = null as any;
+      selected.forEach((cell) => {
+        if (cell.isNode()) {
+          nodeCount++;
+          selectedNode = cell as Node;
+        }
+      });
+      if (nodeCount === 1) { // 只选中了单个结点
+        eventBus.emit(EventEnum.NODE_SELECTED, selectedNode); // 通过事件总线向其他组件传递事件
+      } else {              // 处理框选的情况
+        eventBus.emit(EventEnum.NODE_UNSELECTED);             // 隐藏详情栏
+      }
     });
     // // 监听节点取消选中事件，清除右边栏信息
     // graph.on('node:unselected', () => {
@@ -388,7 +439,7 @@ export namespace GraphUtil {
   }
 
   const initStore = (graph: Graph) => {
-    STATE.graph = graph;
+    globalVar.graph = graph;
     // globalStore.clearSelectedNode();
     // globalStore.selectedColumns = new Map<string, Node>();
     // globalStore.count = 0;

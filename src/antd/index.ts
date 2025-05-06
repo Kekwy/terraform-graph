@@ -3,8 +3,9 @@ import {
   Breadcrumb,
   Button,
   Collapse,
-  Dropdown,
-  Icon,
+  Drawer,
+  Dropdown, Form,
+  Icon, Input,
   Layout,
   List,
   Menu,
@@ -12,7 +13,6 @@ import {
   Tabs,
   Tag,
   Tooltip,
-  // Typography
 } from "ant-design-vue";
 
 const initAntd = () => {
@@ -40,9 +40,16 @@ const initAntd = () => {
   Vue.component('ATabs', Tabs)
   Vue.component('ATabPane', Tabs.TabPane)
   // a-tag
-  Vue.component('ATag', Tag)
+  Vue.component('ATag', Tag);
+  // a-drawer
+  Vue.component('ADrawer', Drawer);
+  Vue.use(Drawer); // fixed: Failed to resolve directive: ant-portal
   //
   // Vue.component('ATypography', Typography)
+  // a-form
+  Vue.component('AForm', Form);
+  Vue.component('AFormItem', Form.Item);
+  Vue.component('AInput', Input);
 
 }
 
