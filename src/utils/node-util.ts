@@ -1,31 +1,6 @@
 import {Graph} from '@antv/x6'
-import {NodeType} from "@/node/node-type";
-import {TfProvider} from "@/node/tf-provider";
-import {TfCore} from "@/node/tf-core";
-import {TfData} from "@/node/tf-data";
-import {TfLocals} from "@/node/tf-locals";
-import {TfModule} from "@/node/tf-module";
-import {TfOutput} from "@/node/tf-output";
-import {TfResource} from "@/node/tf-resource";
-import {TfVariable} from "@/node/tf-variable";
 
-// TODO: 自动扫描目录下的类型
-const nodeTypes: NodeType[] = [
-  TfCore.TYPE,
-  TfData.TYPE,
-  TfLocals.TYPE,
-  TfModule.TYPE,
-  TfOutput.TYPE,
-  TfProvider.TYPE,
-  TfResource.TYPE,
-  TfVariable.TYPE
-]
 
-export function registerNodes() {
-  nodeTypes.forEach(type => {
-    Graph.registerNode(type.name, type.conf, true);
-  });
-}
 
 const awsResourceNodes = [
   {

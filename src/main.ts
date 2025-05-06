@@ -11,12 +11,8 @@ import initAntd from "@/antd";
 
 initAntd()
 
-// antv x6 node
-import {registerAwsNodeTypes} from "@/utils/node-util";
 
-registerAwsNodeTypes()
-
-// register
+// antv x6 shape register
 import {registerShapeType} from "@/node";
 
 registerShapeType()
