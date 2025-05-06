@@ -25,9 +25,9 @@ export default Vue.extend({
 
 <style scoped>
 .icon-item {
-  width: 100px;
+  width: 40px;
   text-align: center;
-  margin: 10px;
+  margin: 5px;
 }
 
 .icon-img {

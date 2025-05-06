@@ -11,7 +11,8 @@ import {
   Select,
   Tabs,
   Tag,
-  Tooltip
+  Tooltip,
+  // Typography
 } from "ant-design-vue";
 
 const initAntd = () => {
@@ -40,7 +41,8 @@ const initAntd = () => {
   Vue.component('ATabPane', Tabs.TabPane)
   // a-tag
   Vue.component('ATag', Tag)
-
+  //
+  // Vue.component('ATypography', Typography)
 
 }
 

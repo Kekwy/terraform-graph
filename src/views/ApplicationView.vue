@@ -3,11 +3,10 @@
 import {mapActions, mapState} from 'vuex'
 import Vue, {nextTick} from "vue";
 import {GraphUtil} from "@/utils/graph-util";
-import GraphToolBar from "@/components/GraphToolBar.vue";
 
 export default Vue.extend({
   name: "ApplicationView",
-  components: {GraphToolBar},
+  components: {},
   computed: {
     ...mapState(['resources', 'connections', 'selectedNode', 'generatedCode'])
   },
@@ -28,7 +27,7 @@ export default Vue.extend({
 
 <template>
   <div style="background: none; width: 100%; height: 100%; min-width: 750px; display: flex; flex-direction: column;">
-    <graph-tool-bar style="height: 48px;"/>
+<!--    <graph-tool-bar style="height: 48px;"/>-->
     <div style="width: 100%; flex: 1;">
       <div ref="graphContainer"/>
     </div>

@@ -35,6 +35,7 @@ export default {
 .icon-row {
   display: flex;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 
