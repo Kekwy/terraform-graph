@@ -15,7 +15,11 @@ export default Vue.extend({
     }
   },
   computed: {},
-  methods: {},
+  methods: {
+    onFormChange() {
+      this.selectedNode.setData(this.nodeData);
+    }
+  },
   data() {
     return {
       nodeData: null as any,
@@ -45,7 +49,7 @@ export default Vue.extend({
 
 <template>
   <!-- TODO: 从左到右展开的一个面板 -->
-  <a-form layout="vertical">
+  <a-form layout="vertical" @change="onFormChange">
     <dynamic-form-item :fixed="nodeData.fixed_value" :model-ref="{value: nodeData.module}" :text="nodeData.text"/>
   </a-form>
 </template>
