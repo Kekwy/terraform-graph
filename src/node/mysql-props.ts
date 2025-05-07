@@ -1,5 +1,5 @@
 import MySQLIcon from "@/assets/icons/mysql-logo-svgrepo-com.svg";
-import {NodeData, NodeProp, NodeType} from "@/node/types";
+import {NodeData, NodeProp, NodeType, Variable} from "@/node/types";
 import {CellStatus} from "@/node/index";
 
 export class MySQLProp implements NodeProp {
@@ -66,7 +66,7 @@ export class MySQLProp implements NodeProp {
           insecure: "var.control_insecure",
         },
         db: {                               //【固定值】指定模板连接信息
-          host_ip: "var.db_host_ip",
+          host_ip: new Variable("var.db_host_ip"),
           host_port: "var.db_host_port",
           host_user: "var.db_host_user",
           host_password: "var.db_host_password",

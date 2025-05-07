@@ -25,7 +25,8 @@ export default Vue.extend({
       nodeData: null as any,
       // 数组表单项相关
       inputVisible: false,
-      inputValue: ''
+      inputValue: '',
+      emptySet: new Set<string>(),
     }
   },
   beforeMount() {
@@ -48,8 +49,9 @@ export default Vue.extend({
 </script>
 
 <template>
-  <a-form layout="vertical" @change="onFormChange">
-    <dynamic-form-item :fixed="nodeData.fixed_value" :model-ref="{value: nodeData.module}" :text="nodeData.text"/>
+  <a-form layout="vertical">
+    <dynamic-form-item :fixed="nodeData?.fixed_value || emptySet" :model-ref="{value: nodeData?.module || {}}"
+                       :text="nodeData?.text || {}"/>
   </a-form>
 </template>
 

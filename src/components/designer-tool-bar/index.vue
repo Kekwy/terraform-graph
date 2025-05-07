@@ -1,35 +1,44 @@
 <script lang="ts">
 import {useRoute} from "vue-router/composables";
+import Vue from "vue";
+import {Route} from "vue-router";
+import {generate} from "@/utils/code";
+import {refreshNodeStatus} from "@/utils/graph-util";
 
-export default {
+export default Vue.extend({
   name: "designer-tool-bar",
   data() {
     return {
       targetValue: 'target1',
       componentValue: 'comp1',
-      activeTab: 'resourceGraph'
+      activeTab: 'resourceGraph',
+      loading: false as any,
     }
   },
   computed: {
-    route() {
+    route(): Route {
       return useRoute();
     },
-    currentRoute() {
+    currentRoute(): string | undefined | null {
       return this.route.name;
     }
   },
   methods: {
-    handleRefresh() {
-      console.log('Refresh clicked');
+    onClickRefreshButton() {
+      refreshNodeStatus();
     },
-    handleServiceEndpoint() {
+    onClickDownloadButton() {
+      this.loading = { delay: 500 };
+      generate().then(() => {
+        this.loading = false;
+      });
       console.log('Service Endpoint clicked');
     },
     handleRecycle() {
       console.log('Recycle clicked');
     }
   }
-}
+});
 </script>
 
 <template>
@@ -49,7 +58,7 @@ export default {
             <a-menu-item key="2"> MySQL</a-menu-item>
             <a-menu-item key="3"> Zookeeper</a-menu-item>
           </a-menu>
-          <a-button style="margin-left: 8px"> 新建
+          <a-button style="margin-left: 8px"> Unknown
             <a-icon type="down"/>
           </a-button>
         </a-dropdown>
@@ -58,33 +67,36 @@ export default {
             :disabled="true"
             v-model="componentValue"
             style="width: 140px; margin-left: 10px"
-            placeholder="Component"
+            placeholder="Unknown"
         >
-          <a-select-option value="comp1">Component</a-select-option>
+          <a-select-option value="comp1">Unknown</a-select-option>
         </a-select>
 
         <a-tag color="green" style="margin-left: 10px">
           <a-icon type="check-circle"/>
-          Application is running
+          Unknown
         </a-tag>
       </div>
 
       <!-- 右侧按钮区域 -->
       <div class="right-section">
         <a-button
-            :disabled="true"
-            shape="circle"
             style="border-color: #1890ff; color: #1890ff"
-            @click="handleRefresh"
+            size="small"
+            @click="onClickRefreshButton"
         >
           <a-icon type="reload"/>
+          刷新
         </a-button>
 
         <a-button
             type="primary"
             style="margin-left: 10px"
-            @click="handleServiceEndpoint"
+            size="small"
+            @click="onClickDownloadButton"
+            :loading="loading"
         >
+          <a-icon type="download" v-if="!loading"/>
           生成代码
         </a-button>
 
@@ -92,9 +104,10 @@ export default {
             :disabled="true"
             type="danger"
             style="margin-left: 10px"
+            size="small"
             @click="handleRecycle"
         >
-          Recycle
+          Unknown
         </a-button>
       </div>
     </div>

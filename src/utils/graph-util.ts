@@ -1,13 +1,56 @@
-import {Graph, Node, Platform, StringExt} from "@antv/x6";
+import {Edge, Graph, Node, Platform, StringExt} from "@antv/x6";
 import {Selection} from "@antv/x6-plugin-selection";
 import {History} from "@antv/x6-plugin-history";
 import {Keyboard} from "@antv/x6-plugin-keyboard";
 import {Export} from "@antv/x6-plugin-export";
 import {Clipboard} from '@antv/x6-plugin-clipboard';
 import {globalVar} from '@/store'
-import {Position} from "@/node";
-import {NodeProp, NodeType} from "@/node/types";
+import {CellStatus, Position} from "@/node";
+import {NodeData, NodeProp, NodeType} from "@/node/types";
 import {eventBus, EventEnum} from "@/utils/event-bus";
+
+export const refreshNodeStatus = () => {
+  const graph = globalVar.graph;
+  graph.getNodes().forEach(node => {
+    const nodeData = node.getData<NodeData>();
+    nodeData.status = CellStatus.DEFAULT;
+  });
+  graph.getEdges().forEach(edge => {
+    edge.attr({
+      line: {
+        stroke: '#A2B1C3',
+        strokeWidth: 1,
+      },
+    });
+    edge.attr('line/strokeDasharray', 5);
+  });
+}
+
+// 关闭边运行的动画
+export const stopAnimate = (edge: Edge, targetNode?: Node) => {
+  edge.attr('line/strokeDasharray', 0);
+  edge.attr('line/style/animation', '');
+  if (!targetNode) {
+    targetNode = edge.getTargetNode() as Node;
+  }
+  const status = targetNode?.getData<NodeData>().status;
+  if (status === CellStatus.SUCCESS) {
+    edge.attr('line/stroke', '#52c41a');
+  } else if (status === CellStatus.ERROR) {
+    edge.attr('line/stroke', '#ff4d4f');
+  }
+}
+
+// 开启边的运行动画
+export const executeAnimate = (edge: Edge) => {
+  edge.attr({
+    line: {
+      stroke: '#3471F9',
+    },
+  });
+  edge.attr('line/strokeDasharray', 5);
+  edge.attr('line/style/animation', 'running-line 30s infinite linear');
+}
 
 export namespace GraphUtil {
 
@@ -32,9 +75,9 @@ export namespace GraphUtil {
   }
 
   export const createTmpNode = (
-    prop: NodeProp,
-    graph: Graph,
-    position?: Position,
+      prop: NodeProp,
+      graph: Graph,
+      position?: Position,
   ): Node => {
     if (!graph) {
       return {} as Node
@@ -42,8 +85,8 @@ export namespace GraphUtil {
     const type = prop.type;
     const nodeData = prop.data();
     const sameTypeNodes = graph
-      .getNodes()
-      .filter((item) => item.getData()?.type === type);
+        .getNodes()
+        .filter((item) => item.getData()?.type === type);
     if (sameTypeNodes.length > 0) {
       nodeData.module.name = `${nodeData.module.name}_${sameTypeNodes.length}`
     }

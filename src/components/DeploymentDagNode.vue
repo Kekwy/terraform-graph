@@ -55,14 +55,18 @@ export default defineComponent({
   },
   computed: {
     name() {
-      return (this.node as Node).getData<NodeData>().module.name;
-    }, nodes() {
+      return this.data.module.name;
+    },
+    nodes() {
       return nodes
-    }, NodeType() {
+    },
+    NodeType() {
       return NodeType
-    }, CellStatus() {
+    },
+    CellStatus() {
       return CellStatus
-    }, NODE_TYPE_LOGO() {
+    },
+    NODE_TYPE_LOGO() {
       return NODE_TYPE_LOGO
     },
     type() {
@@ -93,16 +97,16 @@ export default defineComponent({
     <div class="main-area" @mouseenter="onMainMouseEnter" @mouseleave="onMainMouseLeave">
       <div class="main-info">
         <i class="node-logo" :style="{ backgroundImage: `url(${iconUrl})` }"/>
-        <a-tooltip v-if="name.length>16" :title="name" :mouseEnterDelay="0.8">
-          <div class="ellipsis-row node-name">{{ `${name.slice(0, 12)}...` }}</div>
+        <a-tooltip v-if="name.length>14" :title="name" :mouseEnterDelay="0.8">
+          <div class="ellipsis-row node-name">{{ `${name.slice(0, 10)}...` }}</div>
         </a-tooltip>
         <div v-else class="ellipsis-row node-name">{{ name }}</div>
       </div>
       <div class="status-action">
-        <a-tooltip v-if="status === CellStatus.ERROR" :title="statusMsg">
+        <a-tooltip v-show="status === CellStatus.ERROR" :title="statusMsg">
           <i class="status-icon status-icon-error"/>
         </a-tooltip>
-        <i v-if="status === CellStatus.SUCCESS" class="status-icon status-icon-success"/>
+        <i v-show="status === CellStatus.SUCCESS" class="status-icon status-icon-success"/>
         <div class="more-action-container">
           <i class="more-action"/>
         </div>

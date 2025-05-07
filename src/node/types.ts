@@ -28,3 +28,10 @@ export const nodes = new Map<NodeType, NodeProp>([
   [NodeType.REDIS, new RedisProp()],
   [NodeType.MYSQL, new MySQLProp()],
 ]);
+
+export class Variable {
+  value: string;
+  constructor(value: string) {
+    this.value = value;
+  }
+}

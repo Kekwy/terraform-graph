@@ -2,6 +2,7 @@
 <script lang="ts">
 import Vue, {PropType} from "vue";
 import {Ref} from "@/utils/ref";
+import {Variable} from "@/node/types";
 
 export default Vue.extend({
   name: "dynamic-form-item",
@@ -25,8 +26,11 @@ export default Vue.extend({
     }
   },
   computed: {
+    Variable() {
+      return Variable
+    },
     model(): any {
-      return this.modelRef.value;
+      return this.modelRef.value || {};
     }
   },
   methods: {
@@ -74,8 +78,10 @@ export default Vue.extend({
   <div>
     <template v-for="key in Object.keys(model)">
       <!-- 普通字段（非对象） -->
-      <a-form-item v-if="typeof model[key] !== 'object' || Array.isArray(model[key])" :key="key"
-                   :label="text[key] || key">
+      <a-form-item
+          v-if="typeof model[key] !== 'object' || Array.isArray(model[key]) ||  model[key] instanceof Variable"
+          :key="key"
+          :label="text[key] || key">
         <!-- 字符串 -->
         <a-input v-if="typeof model[key] === 'string'" v-model="model[key]"
                  :disabled="fixed.has(key) || disabled"/>
@@ -114,6 +120,9 @@ export default Vue.extend({
             </a-tag>
           </a>
         </div>
+        <!-- 变量 -->
+        <a-input v-else-if="model[key] instanceof Variable" v-model="model[key].value"
+                 :disabled="fixed.has(key) || disabled"/>
         <!-- 默认 fallback -->
         <span v-else>不支持的类型</span>
       </a-form-item>
