@@ -10,7 +10,7 @@ import {
   NodeType,
   PROCESSING_TYPE_LIST
 } from '@/node'
-import {NodeProp, nodes} from "@/node/types";
+import {NodeData, NodeProp, nodes} from "@/node/types";
 
 export default defineComponent({
   name: 'DeploymentDagNode',
@@ -62,7 +62,7 @@ export default defineComponent({
   },
   computed: {
     name() {
-      return (this.node as Node).getData().name;
+      return (this.node as Node).getData<NodeData>().module.name;
     }, nodes() {
       return nodes
     }, NodeType() {

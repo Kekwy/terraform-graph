@@ -13,7 +13,7 @@ export namespace GraphUtil {
 
   // 根据节点的类型获取ports
   export const getPortsByType = (type: NodeType, nodeId: string) => {
-    let ports = []
+    let ports: any[]
     switch (type) {
       default:
         ports = [
@@ -45,7 +45,7 @@ export namespace GraphUtil {
       .getNodes()
       .filter((item) => item.getData()?.type === type);
     if (sameTypeNodes.length > 0) {
-      nodeData.name = `${nodeData.name}_${sameTypeNodes.length}`
+      nodeData.module.name = `${nodeData.module.name}_${sameTypeNodes.length}`
     }
     const id = StringExt.uuid();
     const nodeMetadata = {

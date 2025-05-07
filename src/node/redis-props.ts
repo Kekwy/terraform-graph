@@ -25,7 +25,8 @@ export class RedisProp implements NodeProp {
   };
 
   readonly fixedValue =
-    new Set<string>(["name", "source", "zh_name", "module_type", "kubernetes"]);
+    // new Set<string>(["name", "source", "zh_name", "module_type", "kubernetes"]);
+    new Set<string>(["source", "zh_name", "module_type", "kubernetes"]);
 
   readonly type = NodeType.REDIS;
   readonly icon = RedisIcon;
@@ -64,7 +65,6 @@ export class RedisProp implements NodeProp {
         * password
         */
       },
-      name: "k8s-redis",  // 对应结点在画布中显示的名称
       fixed_value: this.fixedValue,
       text: this.attrText,
       type: this.type,

@@ -16,7 +16,6 @@ export interface NodeProp {
 
 export interface NodeData {
   module: any;
-  name: string;
   fixed_value: Set<string>;
   text: {
     [key: string]: string

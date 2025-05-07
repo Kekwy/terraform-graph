@@ -6,6 +6,7 @@ import {GraphUtil} from "@/utils/graph-util";
 import {Graph, Node} from "@antv/x6";
 import {eventBus, EventEnum} from "@/utils/event-bus";
 import ConfigPanel from "@/components/config-panel/index.vue";
+import DesignerToolBar from "@/components/designer-tool-bar/index.vue";
 
 interface ComponentData {
   graph: Graph;
@@ -15,7 +16,7 @@ interface ComponentData {
 
 export default Vue.extend({
   name: "ApplicationView",
-  components: {ConfigPanel},
+  components: {DesignerToolBar, ConfigPanel},
   computed: {
     events(): Map<EventEnum, () => void> {
       return new Map<EventEnum, (...arg: any[]) => void>([
@@ -44,6 +45,7 @@ export default Vue.extend({
   methods: {
     ...mapActions(['addResource', 'updateResource', 'connectNodes']),
     handleNodeSelected(selectedNode: Node) {
+      // TODO: 改为双击触发
       this.selectedNode = selectedNode;
       this.showDrawer();
     },
@@ -75,7 +77,7 @@ export default Vue.extend({
 
 <template>
   <div style="background: none; width: 100%; height: 100%; min-width: 750px; display: flex; flex-direction: column;">
-    <!--    <graph-tool-bar style="height: 48px;"/>-->
+    <designer-tool-bar style="height: 48px;"/>
     <div style="width: 100%; flex: 1;">
       <div ref="graphContainer"/>
     </div>

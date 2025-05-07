@@ -36,7 +36,8 @@ export class MySQLProp implements NodeProp {
   }
 
   readonly fixedValue =
-    new Set<string>(["name", "source", "zh_name", "module_type", "vsphere", "control", "db"]);
+    // new Set<string>(["name", "source", "zh_name", "module_type", "vsphere", "control", "db"]);
+    new Set<string>(["source", "zh_name", "module_type", "vsphere", "control", "db"]);
 
   readonly type = NodeType.MYSQL;
   readonly icon = MySQLIcon;
@@ -103,7 +104,6 @@ export class MySQLProp implements NodeProp {
          * schema
          */
       },
-      name: "vsphere-mysql",  // 对应结点在画布中显示的名称
       fixed_value: this.fixedValue,
       text: this.attrText,
       type: this.type,

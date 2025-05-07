@@ -4,8 +4,11 @@ import {
   Button,
   Collapse,
   Drawer,
-  Dropdown, Form,
-  Icon, Input,
+  Dropdown,
+  Form,
+  Icon,
+  Input,
+  InputNumber,
   Layout,
   List,
   Menu,
@@ -50,6 +53,7 @@ const initAntd = () => {
   Vue.component('AForm', Form);
   Vue.component('AFormItem', Form.Item);
   Vue.component('AInput', Input);
+  Vue.component('AInputNumber', InputNumber);
 
 }
 
