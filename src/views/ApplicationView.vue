@@ -20,7 +20,7 @@ export default Vue.extend({
   computed: {
     events(): Map<EventEnum, () => void> {
       return new Map<EventEnum, (...arg: any[]) => void>([
-        [EventEnum.NODE_SELECTED, this.handleNodeSelected],
+        [EventEnum.NODE_DBLCLICK, this.handleNodeDblclick],
         [EventEnum.NODE_UNSELECTED, this.handleNodeUnselected],
       ]);
     },
@@ -44,8 +44,7 @@ export default Vue.extend({
   },
   methods: {
     ...mapActions(['addResource', 'updateResource', 'connectNodes']),
-    handleNodeSelected(selectedNode: Node) {
-      // TODO: 改为双击触发
+    handleNodeDblclick(selectedNode: Node) {
       this.selectedNode = selectedNode;
       this.showDrawer();
     },

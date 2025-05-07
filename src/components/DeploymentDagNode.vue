@@ -1,16 +1,9 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import {Node} from '@antv/x6'
-import {
-  CellStatus,
-  createEdge,
-  createNode,
-  getDownstreamNodePosition,
-  NODE_TYPE_LOGO,
-  NodeType,
-  PROCESSING_TYPE_LIST
-} from '@/node'
+import {CellStatus, createEdge, createNode, getDownstreamNodePosition, NODE_TYPE_LOGO, NodeType} from '@/node'
 import {NodeData, NodeProp, nodes} from "@/node/types";
+import {eventBus, EventEnum} from "@/utils/event-bus";
 
 export default defineComponent({
   name: 'DeploymentDagNode',
@@ -25,8 +18,8 @@ export default defineComponent({
     console.log(this.node)
   },
   methods: {
-    PROCESSING_TYPE_LIST() {
-      return PROCESSING_TYPE_LIST
+    onDblclick() {
+      eventBus.emit(EventEnum.NODE_DBLCLICK, this.node);
     },
     onPlusDropdownOpenChange(val: boolean) {
       this.plusActionSelected = val
@@ -96,13 +89,14 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="deployment-dag-node">
+  <div class="deployment-dag-node" @dblclick="onDblclick">
     <div class="main-area" @mouseenter="onMainMouseEnter" @mouseleave="onMainMouseLeave">
       <div class="main-info">
         <i class="node-logo" :style="{ backgroundImage: `url(${iconUrl})` }"/>
-        <a-tooltip :title="name" :mouseEnterDelay="0.8">
-          <div class="ellipsis-row node-name">{{ name }}</div>
+        <a-tooltip v-if="name.length>16" :title="name" :mouseEnterDelay="0.8">
+          <div class="ellipsis-row node-name">{{ `${name.slice(0, 12)}...` }}</div>
         </a-tooltip>
+        <div v-else class="ellipsis-row node-name">{{ name }}</div>
       </div>
       <div class="status-action">
         <a-tooltip v-if="status === CellStatus.ERROR" :title="statusMsg">

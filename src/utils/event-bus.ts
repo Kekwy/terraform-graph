@@ -5,6 +5,7 @@ export enum EventEnum {
   // GRAPH_INITIATED = "event-graph-initiated",
   NODE_SELECTED = "node-selected",
   NODE_UNSELECTED = "node-unselected",
+  NODE_DBLCLICK = "node-dblclick",
 }
 
 export const eventBus = mitt();

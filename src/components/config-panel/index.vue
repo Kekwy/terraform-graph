@@ -48,7 +48,6 @@ export default Vue.extend({
 </script>
 
 <template>
-  <!-- TODO: 从左到右展开的一个面板 -->
   <a-form layout="vertical" @change="onFormChange">
     <dynamic-form-item :fixed="nodeData.fixed_value" :model-ref="{value: nodeData.module}" :text="nodeData.text"/>
   </a-form>
