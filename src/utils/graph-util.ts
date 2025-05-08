@@ -49,7 +49,7 @@ export const executeAnimate = (edge: Edge) => {
     },
   });
   edge.attr('line/strokeDasharray', 5);
-  edge.attr('line/style/animation', 'running-line 30s infinite linear');
+  edge.attr('line/style/animation', 'running-line 30s infinite linear reverse');
 }
 
 export namespace GraphUtil {
@@ -75,9 +75,9 @@ export namespace GraphUtil {
   }
 
   export const createTmpNode = (
-      prop: NodeProp,
-      graph: Graph,
-      position?: Position,
+    prop: NodeProp,
+    graph: Graph,
+    position?: Position,
   ): Node => {
     if (!graph) {
       return {} as Node
@@ -85,8 +85,8 @@ export namespace GraphUtil {
     const type = prop.type;
     const nodeData = prop.data();
     const sameTypeNodes = graph
-        .getNodes()
-        .filter((item) => item.getData()?.type === type);
+      .getNodes()
+      .filter((item) => item.getData()?.type === type);
     if (sameTypeNodes.length > 0) {
       nodeData.module.name = `${nodeData.module.name}_${sameTypeNodes.length}`
     }
@@ -186,12 +186,12 @@ export namespace GraphUtil {
       // 复制粘贴
       new Clipboard({
         enabled: true,
-      })
+      }),
     ];
   }
 
   const createGraph = (container: HTMLElement): Graph => {
-    return new Graph({
+    const graph = new Graph({
       container: container,
       // width: 100000,
       // height: 100000,
@@ -277,6 +277,25 @@ export namespace GraphUtil {
         ],
       },
     });
+    // const minimapContainer = document.createElement('div');
+    // // 引入小地图插件
+    // graph.use(new MiniMap({
+    //   container: minimapContainer, // 动态创建容器
+    //   width: 240,  // 小地图宽度
+    //   height: 135, // 小地图高度
+    //   padding: 10, // 内边距
+    //   scalable: false, // 禁用缩放（可选）
+    // }));
+    // // 将 Minimap 的 DOM 元素覆盖到画布左下角
+    // minimapContainer.style.position = 'absolute';
+    // minimapContainer.style.left = '0';    // 左下角水平偏移
+    // minimapContainer.style.bottom = '0'; // 左下角垂直偏移
+    // minimapContainer.style.border = '1px solid #d9d9d9';
+    // minimapContainer.style.background = '#fff';
+    //
+    // // 将 Minimap 添加到画布容器中
+    // container.appendChild(minimapContainer);
+    return graph;
   }
 
   const initPlugins = (graph: Graph) => {
