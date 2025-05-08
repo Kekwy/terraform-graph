@@ -50,26 +50,26 @@ export class MySQLProp implements NodeProp {
         zh_name: "MySql8021数据库",          //【固定值】指定中文名称
         module_type: "db",                  //【固定值】指定module类型
         vsphere: {                          //【固定值】指定平台连接信息
-          cluster: "var.vsphere_cluster",
-          datacenter: "var.vsphere_datacenter",
-          vcenter: "var.vsphere_vcenter",
-          user: "var.vsphere_user",
-          password: "var.vsphere_password",
-          unverifiedSsl: "var.vsphere_unverifiedSsl",
+          cluster: new Variable("var.vsphere_cluster"),
+          datacenter: new Variable("var.vsphere_datacenter"),
+          vcenter: new Variable("var.vsphere_vcenter"),
+          user: new Variable("var.vsphere_user"),
+          password: new Variable("var.vsphere_password"),
+          unverifiedSsl: new Variable("var.vsphere_unverifiedSsl"),
         },
         control: {                          //【固定值】指定主控节点连接信息
-          host: "module.vsphere.mysql_ip",
-          port: "var.control_port",
-          type: "var.control_type",
-          user: "var.control_user",
-          password: "var.control_password",
-          insecure: "var.control_insecure",
+          host: new Variable("module.vsphere.mysql_ip"),
+          port: new Variable("var.control_port"),
+          type: new Variable("var.control_type"),
+          user: new Variable("var.control_user"),
+          password: new Variable("var.control_password"),
+          insecure: new Variable("var.control_insecure"),
         },
         db: {                               //【固定值】指定模板连接信息
           host_ip: new Variable("var.db_host_ip"),
-          host_port: "var.db_host_port",
-          host_user: "var.db_host_user",
-          host_password: "var.db_host_password",
+          host_port: new Variable("var.db_host_port"),
+          host_user: new Variable("var.db_host_user"),
+          host_password: new Variable("var.db_host_password"),
         },
         vm_template: "template_mysql8021_yg_20230111",  //【平台配置值】指定vm使用的模板名称
         vm_datastore: "datastore2",                     //【平台配置值】指定vm使用的数据中心名称
