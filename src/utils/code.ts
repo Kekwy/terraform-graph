@@ -38,7 +38,7 @@ export const generate = async () => {
     const outgoingEdges = graph.getOutgoingEdges(node);
     const dependency: string[] = [];
     outgoingEdges?.forEach((edge) => {
-      dependency.push("module." + edge.getSourceNode()?.getData<NodeData>().module.name);
+      dependency.push("module." + edge.getTargetNode()?.getData<NodeData>().module.name);
     });
     // 2.2 生成当前结点对应的 terraform 代码
     generateModuleCode(nodeData.module, builder, dependency);
