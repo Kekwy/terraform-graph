@@ -27,13 +27,13 @@ export const refreshNodeStatus = () => {
 }
 
 // 关闭边运行的动画
-export const stopAnimate = (edge: Edge, targetNode?: Node) => {
+export const stopAnimate = (edge: Edge, sourceNode?: Node) => {
   edge.attr('line/strokeDasharray', 0);
   edge.attr('line/style/animation', '');
-  if (!targetNode) {
-    targetNode = edge.getTargetNode() as Node;
+  if (!sourceNode) {
+    sourceNode = edge.getSourceNode() as Node;
   }
-  const status = targetNode?.getData<NodeData>().status;
+  const status = sourceNode?.getData<NodeData>().status;
   if (status === CellStatus.SUCCESS) {
     edge.attr('line/stroke', '#52c41a');
   } else if (status === CellStatus.ERROR) {
@@ -226,15 +226,15 @@ export namespace GraphUtil {
         allowLoop: false,
         highlight: true,
         sourceAnchor: {
-          name: 'left',
+          name: 'right', // 曲线方向翻转
           args: {
-            dx: Platform.IS_SAFARI ? 4 : 8,
+            dx: Platform.IS_SAFARI ? 4 : -8,
           },
         },
         targetAnchor: {
-          name: 'right',
+          name: 'left',
           args: {
-            dx: Platform.IS_SAFARI ? 4 : -8,
+            dx: Platform.IS_SAFARI ? 4 : 8,
           },
         },
         createEdge() {

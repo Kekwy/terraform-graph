@@ -75,10 +75,10 @@ export const NODE_TYPE_LOGO: Map<NodeType, string> = new Map<NodeType, string>([
  * @returns
  */
 export const getDownstreamNodePosition = (
-  node: Node,
-  graph: Graph,
-  dx = 250,
-  dy = 100,
+    node: Node,
+    graph: Graph,
+    dx = 250,
+    dy = 100,
 ) => {
   // 找出画布中以该起始节点为起点的相关边的终点id集合
   const downstreamNodeIdList: string[] = []
@@ -149,7 +149,6 @@ export const getPortsByType = (type: NodeType, nodeId: string) => {
 }
 
 
-
 /**
  * 创建节点并添加到画布
  * @param type 节点类型
@@ -158,18 +157,18 @@ export const getPortsByType = (type: NodeType, nodeId: string) => {
  * @returns
  */
 export const createNode = (
-  type: NodeType,
-  graph: Graph,
-  position?: Position,
+    type: NodeType,
+    graph: Graph,
+    position?: Position,
 ): Node => {
   if (!graph) {
     return {} as Node
   }
   const sameTypeNodes = graph
-    .getNodes()
-    .filter((item) => item.getData()?.type === type)
+      .getNodes()
+      .filter((item) => item.getData()?.type === type)
   const typeName = PROCESSING_TYPE_LIST?.find(
-    (item) => item.type === type,
+      (item) => item.type === type,
   )?.name
   const id = StringExt.uuid()
   const node = {
@@ -225,11 +224,17 @@ export const registerShapeType = () => {
     ports: {
       groups: {
         in: {
-          position: 'left',
+          position: {
+            name: 'right',
+            args: {
+              dx: -32,
+            },
+          },
           attrs: {
             circle: {
               r: 4,
-              magnet: true,
+              magnet: 'passive',
+              // magnet: true,
               stroke: 'transparent',
               strokeWidth: 1,
               fill: 'transparent',
@@ -239,10 +244,7 @@ export const registerShapeType = () => {
 
         out: {
           position: {
-            name: 'right',
-            args: {
-              dx: -32,
-            },
+            name: 'left',
           },
 
           attrs: {
@@ -263,13 +265,16 @@ export const registerShapeType = () => {
   Graph.registerConnector(
     'curveConnector',
     (sourcePoint, targetPoint) => {
+      // const tmp = sourcePoint;
+      // sourcePoint = targetPoint;
+      // targetPoint = tmp;
       const hgap = Math.abs(targetPoint.x - sourcePoint.x)
       const path = new Path()
       path.appendSegment(
-        Path.createSegment('M', sourcePoint.x - 4, sourcePoint.y),
+        Path.createSegment('M', sourcePoint.x + 4, sourcePoint.y),
       )
       path.appendSegment(
-        Path.createSegment('L', sourcePoint.x + 12, sourcePoint.y),
+        Path.createSegment('L', sourcePoint.x - 12, sourcePoint.y),
       )
       // 水平三阶贝塞尔曲线
       path.appendSegment(
@@ -283,17 +288,17 @@ export const registerShapeType = () => {
             ? targetPoint.x - hgap / 2
             : targetPoint.x + hgap / 2,
           targetPoint.y,
-          targetPoint.x - 6,
+          targetPoint.x + 6,
           targetPoint.y,
         ),
       )
       path.appendSegment(
-        Path.createSegment('L', targetPoint.x + 2, targetPoint.y),
+        Path.createSegment('L', targetPoint.x, targetPoint.y),
       )
 
-      return path.serialize()
-    },
-    true,
+        return path.serialize()
+      },
+      true,
   )
 
   Edge.config({
@@ -318,6 +323,7 @@ export const registerShapeType = () => {
       },
     ],
     connector: {name: 'curveConnector'},
+    // connector: {name: 'straight'},
     attrs: {
       wrap: {
         connection: true,

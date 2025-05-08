@@ -14,16 +14,16 @@ export const generate = async () => {
     message.info("图为空");
     return;
   }
-  const nodesWithInDegree = new Map<string, number>();
+  const nodesWithOutDegree = new Map<string, number>();
   const queue: Queue<Node> = new LinkedListQueue<Node>();
   nodes.forEach((node) => {
-    const inDegree = graph.getIncomingEdges(node)?.length || 0;
-    if (inDegree === 0) {
+    const outDegree = graph.getOutgoingEdges(node)?.length || 0;
+    if (outDegree === 0) {
       queue.push(node);
     }
-    nodesWithInDegree.set(node.id, inDegree);
+    nodesWithOutDegree.set(node.id, outDegree);
   });
-  // 2. 以拓扑顺序生成代码以实现动画效果
+  // 2. 以逆拓扑顺序生成代码以实现动画效果
   if (queue.empty()) {
     message.error("图中存在环");
     return;
@@ -35,44 +35,43 @@ export const generate = async () => {
     const node = queue.pop() as Node;
     const nodeData = node.getData<NodeData>();
     // 2.1 获取 module 依赖
-    const incomingEdges = graph.getIncomingEdges(node);
+    const outgoingEdges = graph.getOutgoingEdges(node);
     const dependency: string[] = [];
-    incomingEdges?.forEach((edge) => {
+    outgoingEdges?.forEach((edge) => {
       dependency.push("module." + edge.getSourceNode()?.getData<NodeData>().module.name);
     });
     // 2.2 生成当前结点对应的 terraform 代码
     generateModuleCode(nodeData.module, builder, dependency);
     // 2.3 延时关闭边动画并设置结点状态
-
     setTimeout(() => {
       nodeData.status = CellStatus.SUCCESS;
-      incomingEdges?.forEach((edge) => {
+      outgoingEdges?.forEach((edge) => {
         stopAnimate(edge, node);
       });
     }, 600)
     // 2.4 遍历子结点
-    graph.getOutgoingEdges(node)?.forEach((edge) => {
+    graph.getIncomingEdges(node)?.forEach((edge) => {
       // 2.4.1 开启边动画
       executeAnimate(edge);
-      // 2.4.2 选中入度为 0 的结点加入队列
-      const targetNode = edge.getTargetNode() as Node;
-      const inDegree = nodesWithInDegree.get(targetNode?.id as string) as number - 1;
-      nodesWithInDegree.set(targetNode.id, inDegree);
+      // 2.4.2 选中出度为 0 的结点加入队列
+      const sourceNode = edge.getSourceNode() as Node;
+      const inDegree = nodesWithOutDegree.get(sourceNode?.id as string) as number - 1;
+      nodesWithOutDegree.set(sourceNode.id, inDegree);
       if (inDegree === 0) {
-        queue.push(targetNode);
+        queue.push(sourceNode);
       }
     });
   }
   if (num !== nodes.length) {
     message.error("图中存在环");
     // 设置环中结点状态
-    nodesWithInDegree.forEach((value, key) => {
+    nodesWithOutDegree.forEach((value, key) => {
       if (value !== 0) {
         const node = graph.getCellById(key) as Node;
         const nodeData = node.getData<NodeData>();
         nodeData.status = CellStatus.ERROR;
         // 关闭边的动画
-        graph.getIncomingEdges(node)?.forEach((edge) => {
+        graph.getOutgoingEdges(node)?.forEach((edge) => {
           stopAnimate(edge, node);
         })
       }
@@ -117,7 +116,7 @@ const generateHelper = (module: any, builder: CodeBuilder, level: number) => {
 }
 
 const generateModuleCode = (module: any, builder: CodeBuilder, dependency: string[]) => {
-  builder.append("module \"").append(module.name).append(" {").newLine();
+  builder.append("module \"").append(module.name).append("\" {").newLine();
   generateHelper(module, builder, 1);
   if (dependency.length > 0) {
     builder.indent(1).append("depends_on = [");
@@ -145,7 +144,7 @@ class CodeBuilder {
   }
 
   newLine(): CodeBuilder {
-    this.content.push("\r\n");
+    this.content.push("\n");
     return this;
   }
 

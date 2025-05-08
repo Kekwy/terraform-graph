@@ -86,7 +86,7 @@ export default Vue.extend({
             @click="onClickRefreshButton"
         >
           <a-icon type="reload"/>
-          刷新
+          重置
         </a-button>
 
         <a-button
