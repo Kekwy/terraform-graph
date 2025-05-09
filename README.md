@@ -1,4 +1,4 @@
-# terraform-graph
+# Terraform Graph
 
 <div id="tags">
 <img alt="terraform" src="https://img.shields.io/badge/terraform-8A2BE2">
