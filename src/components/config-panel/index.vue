@@ -15,17 +15,10 @@ export default Vue.extend({
     }
   },
   computed: {},
-  methods: {
-    onFormChange() {
-      this.selectedNode.setData(this.nodeData);
-    }
-  },
+  methods: {},
   data() {
     return {
       nodeData: null as any,
-      // 数组表单项相关
-      inputVisible: false,
-      inputValue: '',
       emptySet: new Set<string>(),
     }
   },

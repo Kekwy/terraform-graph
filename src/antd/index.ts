@@ -18,6 +18,7 @@ import {
   Tooltip,
 } from "ant-design-vue";
 
+// 手动注册 antd 组件，解决在标签中使用 antd 组件时 IDE 报错的问题。
 const initAntd = () => {
   Vue.component('AButton', Button)
   Vue.component('ALayout', Layout)

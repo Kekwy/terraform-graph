@@ -7,18 +7,22 @@ import {Variable} from "@/node/types";
 export default Vue.extend({
   name: "dynamic-form-item",
   props: {
+    // 表单数据的引用，用于解决 props 本身的值无法直接修改的问题
     modelRef: {
       type: null as unknown as PropType<Ref<any>>,
       required: true,
     },
+    // 表单属性在配置面板表单项中展示的文本标题
     text: {
       type: Object,
       required: false,
     },
+    // 记录表单属性中的“固定值”，对这些固定值的表单项禁止修改
     fixed: {
       type: Set<string>,
       required: true,
     },
+    // 父属性是否为固定值，固定值的子属性也均需要禁止修改
     disabled: {
       type: Boolean,
       default: false,
@@ -34,12 +38,12 @@ export default Vue.extend({
     }
   },
   methods: {
-    handleClose(key: string, index: number) {
+    // 通过标签交互的形式展示并修改数组类型属性，相关的方法：
+    onTagClose(key: string, index: number) {
       let array = this.model[key] as any[];
       array.splice(index, 1);
     },
-
-    showInput() {
+    showTagInput() {
       this.inputVisible = true;
       this.$nextTick(() => {
         const inputComponent = this.$refs.inputRef as Vue & { focus: () => void };
@@ -48,13 +52,10 @@ export default Vue.extend({
         }
       });
     },
-
-    handleInputChange(e: any) {
+    onTagInputChange(e: any) {
       this.inputValue = e.target.value;
     },
-
-    handleInputConfirm(key: string) {
-      console.log(key);
+    onTagInputConfirm(key: string) {
       const inputValue = this.inputValue;
       if (inputValue.length > 0) {
         let array = this.model[key] as any[];
@@ -92,11 +93,11 @@ export default Vue.extend({
         <div v-else-if="Array.isArray(model[key])">
           <template v-for="(element, index) in model[key]">
             <a-tooltip v-if="element.length > 20" :key="element" :title="element">
-              <a-tag :key="element" :closable="!fixed.has(key) && !disabled" @close="handleClose(key, index)">
+              <a-tag :key="element" :closable="!fixed.has(key) && !disabled" @close="onTagClose(key, index)">
                 {{ `${element.slice(0, 20)}...` }}
               </a-tag>
             </a-tooltip>
-            <a-tag v-else :key="element" :closable="!fixed.has(key) && !disabled" @close="handleClose(key, index)">
+            <a-tag v-else :key="element" :closable="!fixed.has(key) && !disabled" @close="onTagClose(key, index)">
               {{ element }}
             </a-tag>
           </template>
@@ -109,12 +110,12 @@ export default Vue.extend({
                 :style="{ width: '78px' }"
                 :value="inputValue"
                 autoFocus
-                @change="handleInputChange"
-                @blur="handleInputConfirm(key)"
-                @keyup.enter="handleInputConfirm(key)"
+                @change="onTagInputChange"
+                @blur="onTagInputConfirm(key)"
+                @keyup.enter="onTagInputConfirm(key)"
             />
             <!--suppress CssUnknownProperty -->
-            <a-tag v-else style="background: #fff; borderStyle: dashed;" @click="showInput">
+            <a-tag v-else style="background: #fff; borderStyle: dashed;" @click="showTagInput">
               <a-icon type="plus"/>
               New Tag
             </a-tag>

@@ -9,9 +9,6 @@ export default Vue.extend({
   name: "designer-tool-bar",
   data() {
     return {
-      targetValue: 'target1',
-      componentValue: 'comp1',
-      activeTab: 'resourceGraph',
       loading: false as any,
     }
   },
@@ -28,7 +25,7 @@ export default Vue.extend({
       refreshNodeStatus();
     },
     onClickDownloadButton() {
-      this.loading = { delay: 500 };
+      this.loading = {delay: 500};
       generate().then(() => {
         this.loading = false;
       });
@@ -47,7 +44,7 @@ export default Vue.extend({
     <div class="toolbar">
       <!-- 左侧选择区域 -->
       <div class="left-section">
-
+        <!--  TODO: 待加入实际功能      -->
         <a-dropdown style="width: 120px" :trigger="['click']" :disabled="true">
           <a-menu slot="overlay" style="user-select: none;  /* 标准属性 */
                                         -webkit-user-select: none; /* Chrome/Safari */
@@ -62,16 +59,15 @@ export default Vue.extend({
             <a-icon type="down"/>
           </a-button>
         </a-dropdown>
-
+        <!--  TODO: 待加入实际功能      -->
         <a-select
             :disabled="true"
-            v-model="componentValue"
             style="width: 140px; margin-left: 10px"
             placeholder="Unknown"
         >
           <a-select-option value="comp1">Unknown</a-select-option>
         </a-select>
-
+        <!--  TODO: 待加入实际功能      -->
         <a-tag color="green" style="margin-left: 10px">
           <a-icon type="check-circle"/>
           Unknown
@@ -79,6 +75,7 @@ export default Vue.extend({
       </div>
 
       <!-- 右侧按钮区域 -->
+      <!-- 重置画布中结点状态的按钮 -->
       <div class="right-section">
         <a-button
             style="border-color: #1890ff; color: #1890ff"
