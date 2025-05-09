@@ -3,11 +3,10 @@ import {Selection} from "@antv/x6-plugin-selection";
 import {History} from "@antv/x6-plugin-history";
 import {Keyboard} from "@antv/x6-plugin-keyboard";
 import {Export} from "@antv/x6-plugin-export";
-import {Clipboard} from '@antv/x6-plugin-clipboard';
-import {globalVar} from '@/store'
-import {CellStatus, Position, NodeData, NodeProp, NodeType} from "@/node";
+import {Clipboard} from "@antv/x6-plugin-clipboard";
+import {globalVar} from "@/store";
+import {CellStatus, NodeData, NodeProp, NodeType, Position} from "@/node";
 import {eventBus, EventEnum} from "@/utils/event-bus";
-
 
 /**
  * 创建节点并添加到画布
@@ -19,11 +18,11 @@ import {eventBus, EventEnum} from "@/utils/event-bus";
 export const createNode = (
   prop: NodeProp,
   graph: Graph,
-  position?: Position,
+  position?: Position
 ): Node => {
   const node = GraphUtil.createTmpNode(prop, graph, position);
-  return graph.addNode(node) as Node
-}
+  return graph.addNode(node) as Node;
+};
 
 /**
  * 创建边并添加到画布
@@ -34,7 +33,7 @@ export const createNode = (
 export const createEdge = (source: string, target: string, graph: Graph) => {
   const edge = {
     id: StringExt.uuid(),
-    shape: 'deployment-curve',
+    shape: "deployment-curve",
     source: {
       cell: source,
       port: `${source}-out`,
@@ -48,11 +47,11 @@ export const createEdge = (source: string, target: string, graph: Graph) => {
       source,
       target,
     },
-  }
+  };
   if (graph) {
-    graph.addEdge(edge)
+    graph.addEdge(edge);
   }
-}
+};
 
 /**
  * 根据起点初始下游节点的位置信息
@@ -66,113 +65,112 @@ export const getDownstreamNodePosition = (
   node: Node,
   graph: Graph,
   dx = 250,
-  dy = 100,
+  dy = 100
 ) => {
   // 找出画布中以该起始节点为起点的相关边的终点id集合
-  const downstreamNodeIdList: string[] = []
+  const downstreamNodeIdList: string[] = [];
   graph.getEdges().forEach((edge) => {
-    const originEdge = edge.toJSON()?.data
+    const originEdge = edge.toJSON()?.data;
     if (originEdge.source === node.id) {
-      downstreamNodeIdList.push(originEdge.target)
+      downstreamNodeIdList.push(originEdge.target);
     }
-  })
+  });
   // 获取起点的位置信息
-  const position = node.getPosition()
-  let minX = Infinity
-  let maxY = -Infinity
+  const position = node.getPosition();
+  let minX = Infinity;
+  let maxY = -Infinity;
   graph.getNodes().forEach((graphNode) => {
     if (downstreamNodeIdList.indexOf(graphNode.id) > -1) {
-      const nodePosition = graphNode.getPosition()
+      const nodePosition = graphNode.getPosition();
       // 找到所有节点中最左侧的节点的x坐标
       if (nodePosition.x < minX) {
-        minX = nodePosition.x
+        minX = nodePosition.x;
       }
       // 找到所有节点中最x下方的节点的y坐标
       if (nodePosition.y > maxY) {
-        maxY = nodePosition.y
+        maxY = nodePosition.y;
       }
     }
-  })
+  });
 
   return {
     x: minX !== Infinity ? minX : position.x + dx,
     y: maxY !== -Infinity ? maxY + dy : position.y,
-  }
-}
+  };
+};
 
 export const refreshNodeStatus = () => {
   const graph = globalVar.graph;
-  graph.getNodes().forEach(node => {
+  graph.getNodes().forEach((node) => {
     const nodeData = node.getData<NodeData>();
     nodeData.status = CellStatus.DEFAULT;
   });
-  graph.getEdges().forEach(edge => {
+  graph.getEdges().forEach((edge) => {
     edge.attr({
       line: {
-        stroke: '#A2B1C3',
+        stroke: "#A2B1C3",
         strokeWidth: 1,
       },
     });
-    edge.attr('line/strokeDasharray', 5);
+    edge.attr("line/strokeDasharray", 5);
   });
-}
+};
 
 // 关闭边运行的动画
 export const stopAnimate = (edge: Edge, sourceNode?: Node) => {
-  edge.attr('line/strokeDasharray', 0);
-  edge.attr('line/style/animation', '');
+  edge.attr("line/strokeDasharray", 0);
+  edge.attr("line/style/animation", "");
   if (!sourceNode) {
     sourceNode = edge.getSourceNode() as Node;
   }
   const status = sourceNode?.getData<NodeData>().status;
   if (status === CellStatus.SUCCESS) {
-    edge.attr('line/stroke', '#52c41a');
+    edge.attr("line/stroke", "#52c41a");
   } else if (status === CellStatus.ERROR) {
-    edge.attr('line/stroke', '#ff4d4f');
+    edge.attr("line/stroke", "#ff4d4f");
   }
-}
+};
 
 // 开启边的运行动画
 export const executeAnimate = (edge: Edge) => {
   edge.attr({
     line: {
-      stroke: '#3471F9',
+      stroke: "#3471F9",
     },
   });
-  edge.attr('line/strokeDasharray', 5);
-  edge.attr('line/style/animation', 'running-line 30s infinite linear reverse');
-}
+  edge.attr("line/strokeDasharray", 5);
+  edge.attr("line/style/animation", "running-line 30s infinite linear reverse");
+};
 
 // TODO: 以下方法继承自先有的另一个项目，后续将进一步整理修改，并计划移除命名空间
 export namespace GraphUtil {
-
   // 根据节点的类型获取ports
   export const getPortsByType = (type: NodeType, nodeId: string) => {
-    let ports: any[]
+    let ports: any[];
     switch (type) {
       default:
         ports = [
           {
             id: `${nodeId}-in`,
-            group: 'in',
+            group: "in",
           },
           {
             id: `${nodeId}-out`,
-            group: 'out',
+            group: "out",
           },
-        ]
-        break
+        ];
+        break;
     }
-    return ports
-  }
+    return ports;
+  };
 
   export const createTmpNode = (
     prop: NodeProp,
     graph: Graph,
-    position?: Position,
+    position?: Position
   ): Node => {
     if (!graph) {
-      return {} as Node
+      return {} as Node;
     }
     const type = prop.type;
     const nodeData = prop.data();
@@ -180,19 +178,19 @@ export namespace GraphUtil {
       .getNodes()
       .filter((item) => item.getData()?.type === type);
     if (sameTypeNodes.length > 0) {
-      nodeData.module.name = `${nodeData.module.name}_${sameTypeNodes.length}`
+      nodeData.module.name = `${nodeData.module.name}_${sameTypeNodes.length}`;
     }
     const id = StringExt.uuid();
     const nodeMetadata = {
       id,
-      shape: 'deployment-dag-node',
+      shape: "deployment-dag-node",
       x: position?.x,
       y: position?.y,
       ports: getPortsByType(type, id),
       data: nodeData,
-    }
+    };
     return graph.createNode(nodeMetadata);
-  }
+  };
 
   export function disposeGraph(graph: Graph) {
     graph.dispose();
@@ -232,25 +230,24 @@ export namespace GraphUtil {
     //         padding: 20,
     //         quality: 1,
     //     });
-  }
+  };
 
   const selectColumn = (portId: string, node: Node) => {
     // node.setPortProp(portId as string, "attrs/portBody/fill", "#FFE8D5");
     // globalStore.selectedColumns.set(portId, node);
-  }
+  };
 
   const deselectColumns = () => {
     // globalStore.selectedColumns.forEach((node, portId) => {
     //     node.setPortProp(portId as string, "attrs/portBody/fill", "#EFF4FF")
     // });
     // globalStore.selectedColumns.clear();
-  }
-
+  };
 
   const deselectColumn = (portId: string) => {
     // globalStore.selectedColumns.get(portId)?.setPortProp(portId as string, "attrs/portBody/fill", "#EFF4FF");
     // globalStore.selectedColumns.delete(portId);
-  }
+  };
 
   const plugins = () => {
     return [
@@ -262,7 +259,7 @@ export namespace GraphUtil {
         movable: true,
         rubberEdge: true,
         rubberNode: true,
-        modifiers: 'shift',
+        modifiers: "shift",
       }),
       // 撤销、重做
       new History({
@@ -280,29 +277,31 @@ export namespace GraphUtil {
         enabled: true,
       }),
     ];
-  }
+  };
 
   const createGraph = (container: HTMLElement): Graph => {
     const graph = new Graph({
       container: container,
       autoResize: true,
-      mousewheel: { // 画布缩放
+      mousewheel: {
+        // 画布缩放
         enabled: true,
-        modifiers: ['ctrl'],
+        modifiers: ["ctrl"],
         factor: 1.1,
         maxScale: 1.5,
         minScale: 0.5,
       },
-      panning: {    // 画布平移
+      panning: {
+        // 画布平移
         enabled: true,
       },
       highlighting: {
         magnetAdsorbed: {
-          name: 'stroke',
+          name: "stroke",
           args: {
             attrs: {
-              fill: '#fff',
-              stroke: '#31d0c6',
+              fill: "#fff",
+              stroke: "#31d0c6",
               strokeWidth: 4,
             },
           },
@@ -314,51 +313,56 @@ export namespace GraphUtil {
         allowLoop: false,
         highlight: true,
         sourceAnchor: {
-          name: 'right', // 曲线方向翻转
+          name: "right", // 曲线方向翻转
           args: {
             dx: Platform.IS_SAFARI ? 4 : -8,
           },
         },
         targetAnchor: {
-          name: 'left',
+          name: "left",
           args: {
             dx: Platform.IS_SAFARI ? 4 : 8,
           },
         },
         createEdge() {
           return this.createEdge({
-            shape: 'deployment-curve',
+            shape: "deployment-curve",
             attrs: {
               line: {
-                strokeDasharray: '5 5',
+                strokeDasharray: "5 5",
               },
             },
             zIndex: -1,
-          })
+          });
         },
         // 连接桩校验
-        validateConnection({sourceMagnet, targetMagnet}) {
+        validateConnection({ sourceMagnet, targetMagnet }) {
           // 只能从输出链接桩创建连接
-          if (!sourceMagnet || sourceMagnet.getAttribute('port-group') === 'in') {
-            return false
+          if (
+            !sourceMagnet ||
+            sourceMagnet.getAttribute("port-group") === "in"
+          ) {
+            return false;
           }
           // 只能连接到输入链接桩
-          return !(!targetMagnet || targetMagnet.getAttribute('port-group') !== 'in');
+          return !(
+            !targetMagnet || targetMagnet.getAttribute("port-group") !== "in"
+          );
         },
       },
       background: {
-        color: '#F2F7FA',
+        color: "#F2F7FA",
       },
       grid: {
         visible: true,
-        type: 'doubleMesh',
+        type: "doubleMesh",
         args: [
           {
-            color: '#eee', // 主网格线颜色
+            color: "#eee", // 主网格线颜色
             thickness: 1, // 主网格线宽度
           },
           {
-            color: '#ddd', // 次网格线颜色
+            color: "#ddd", // 次网格线颜色
             thickness: 1, // 次网格线宽度
             factor: 4, // 主次网格线间隔
           },
@@ -384,19 +388,19 @@ export namespace GraphUtil {
     // // 将 Minimap 添加到画布容器中
     // container.appendChild(minimapContainer);
     return graph;
-  }
+  };
 
   const initPlugins = (graph: Graph) => {
     plugins().forEach((plugin) => {
       graph.use(plugin);
     });
-  }
+  };
 
   const initKeyHandlers = (graph: Graph) => {
     // 绑定删除元素操作
-    graph.bindKey(['backspace', 'delete'], () => {
+    graph.bindKey(["backspace", "delete"], () => {
       const cells = graph.getSelectedCells();
-      cells.forEach(cell => {
+      cells.forEach((cell) => {
         cell.remove();
       });
     });
@@ -411,7 +415,7 @@ export namespace GraphUtil {
     });
     // 绑定保存操作
     graph.bindKey(["ctrl+s"], (e) => {
-      e.preventDefault()
+      e.preventDefault();
       saveCanvas(graph).then();
     });
     graph.bindKey(["ctrl+c"], () => {
@@ -425,7 +429,7 @@ export namespace GraphUtil {
       graph.cleanSelection();
       graph.select(cells);
     });
-  }
+  };
 
   const initEventHandlers = (graph: Graph) => {
     // // 监听节点选中事件
@@ -433,7 +437,7 @@ export namespace GraphUtil {
     //   eventBus.emit(EVENT_NODE_SELECTED, node); // 通过事件总线向其他组件传递事件
     // });
     // 监听节点选中事件，处理框选
-    graph.on('selection:changed', ({selected}) => {
+    graph.on("selection:changed", ({ selected }) => {
       let nodeCount = 0;
       let selectedNode: Node = null as any;
       selected.forEach((cell) => {
@@ -442,39 +446,41 @@ export namespace GraphUtil {
           selectedNode = cell as Node;
         }
       });
-      if (nodeCount === 1) { // 只选中了单个结点
+      if (nodeCount === 1) {
+        // 只选中了单个结点
         eventBus.emit(EventEnum.NODE_SELECTED, selectedNode); // 通过事件总线向其他组件传递事件
-      } else {              // 处理框选的情况
-        eventBus.emit(EventEnum.NODE_UNSELECTED);             // 隐藏详情栏
+      } else {
+        // 处理框选的情况
+        eventBus.emit(EventEnum.NODE_UNSELECTED); // 隐藏详情栏
       }
     });
     // // 监听节点取消选中事件，清除右边栏信息
     // graph.on('node:unselected', () => {
     //   eventBus.emit(EVENT_NODE_UNSELECTED);
     // });
-    graph.on('edge:click', ({edge}) => {
+    graph.on("edge:click", ({ edge }) => {
       deselectColumns();
       // 可以在这里执行选中边后的操作
       // 例如：获取边的属性、展示边的信息等
       // eventBus.emit(EVENT_EDGE_CLICK, edge);
     });
     // // 监听空白区域点击事件，隐藏详细信息
-    graph.on('blank:click', () => {
+    graph.on("blank:click", () => {
       deselectColumns();
     });
     // graph.on('node:click', () => {
     //   deselectColumns();
     // });
     // 监听 port 点击事件
-    graph.on('node:port:click', ({node, port}) => {
+    graph.on("node:port:click", ({ node, port }) => {
       // if (globalStore.selectedColumns.has(port as string)) {
       //     deselectColumn(port as string);
       // } else {
       //     selectColumn(port as string, node);
       // }
     });
-    graph.on("node:port:contextmenu", ({node, port, e}) => {
-      e.preventDefault();                         // 阻止默认右键行为
+    graph.on("node:port:contextmenu", ({ node, port, e }) => {
+      e.preventDefault(); // 阻止默认右键行为
       // if (!globalStore.selectedColumns.has(port as string)) {     // 选中当前右键的列
       //     selectColumn(port as string, node);
       // }
@@ -561,32 +567,30 @@ export namespace GraphUtil {
       // });
     });
     // 监听节点右键事件，定义右键菜单及其功能
-    graph.on("node:contextmenu", ({node, e}) => {
+    graph.on("node:contextmenu", ({ node, e }) => {
       // 检查是否是 port 被点击
-      if (e.target.closest('.x6-port')) {
+      if (e.target.closest(".x6-port")) {
         return; // 阻止 node 的右键菜单显示
       }
-      e.preventDefault();                  // 阻止默认右键行为
+      e.preventDefault(); // 阻止默认右键行为
       // globalStore.setSelectedNode(node);   // 设置当前节点
       // 创建右键菜单
       // TableNodeContextMenu.show(e.clientX, e.clientY);
     });
     /* ------ 监听画布修改事件 ------ */
-    graph.on('cell:change:*', () => {
+    graph.on("cell:change:*", () => {
       // globalStore.setModified(true);
     });
 
-    graph.on('cell:added', () => {
+    graph.on("cell:added", () => {
       // globalStore.setModified(true);
     });
 
-    graph.on('cell:removed', () => {
+    graph.on("cell:removed", () => {
       // globalStore.setModified(true);
     });
     /* --------------------------- */
-
-
-  }
+  };
 
   const initStore = (graph: Graph) => {
     globalVar.graph = graph;
@@ -596,7 +600,7 @@ export namespace GraphUtil {
     // globalStore.namespace = new Set<string>();
     // globalStore.setModified(false);
     // globalStore.setSaving(false);
-  }
+  };
 
   export function initGraph(container: HTMLElement): Graph {
     const graph = createGraph(container);
@@ -606,5 +610,4 @@ export namespace GraphUtil {
     initStore(graph);
     return graph;
   }
-
 }

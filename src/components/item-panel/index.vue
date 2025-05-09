@@ -1,21 +1,21 @@
 <script lang="ts">
-import {NodeProp, nodes} from "@/node";
+import { NodeProp, nodes } from "@/node";
 import ItemPanelItem from "@/components/item-panel/item.vue";
-import {eventBus, EventEnum} from "@/utils/event-bus";
-import {Dnd} from "@antv/x6-plugin-dnd";
-import {globalVar} from "@/store";
+import { eventBus, EventEnum } from "@/utils/event-bus";
+import { Dnd } from "@antv/x6-plugin-dnd";
+import { globalVar } from "@/store";
 import Vue from "vue";
-import {Graph} from "@antv/x6";
-import {GraphUtil} from "@/utils/graph-util";
+import { Graph } from "@antv/x6";
+import { GraphUtil } from "@/utils/graph-util";
 
 interface ComponentData {
-  dnd: Dnd,
-  graph: Graph,
+  dnd: Dnd;
+  graph: Graph;
 }
 
 export default Vue.extend({
   name: "item-panel",
-  components: {ItemPanelItem},
+  components: { ItemPanelItem },
   methods: {
     handleGraphInitiated() {
       this.graph = globalVar.graph;
@@ -24,12 +24,9 @@ export default Vue.extend({
       });
     },
     onMousedown(event: MouseEvent, item: NodeProp) {
-      const node = GraphUtil.createTmpNode(
-          item,
-          this.graph,
-      );
+      const node = GraphUtil.createTmpNode(item, this.graph);
       this.dnd.start(node, event);
-    }
+    },
   },
   computed: {
     items() {
@@ -38,7 +35,7 @@ export default Vue.extend({
     // 需要监听的事件总线的事件及其处理方法
     events(): Map<EventEnum, () => void> {
       return new Map<EventEnum, () => void>([
-        [EventEnum.GRAPH_INITIATED, this.handleGraphInitiated]
+        [EventEnum.GRAPH_INITIATED, this.handleGraphInitiated],
       ]);
     },
   },
@@ -46,7 +43,7 @@ export default Vue.extend({
     return {
       dnd: null as any,
       graph: null as any,
-    }
+    };
   },
   beforeMount() {
     // 注册监听事件的处理方法
@@ -59,25 +56,21 @@ export default Vue.extend({
     this.events.forEach((handler: () => void, event: EventEnum) => {
       eventBus.off(event, handler);
     });
-  }
+  },
 });
 </script>
 
 <template>
   <div class="icon-page">
     <div class="icon-row">
-      <div
-          v-for="(item, index) in items"
-          :key="index"
-      >
+      <div v-for="(item, index) in items" :key="index">
         <div @mousedown="onMousedown($event, item)">
-          <item-panel-item :item="item"/>
+          <item-panel-item :item="item" />
         </div>
       </div>
     </div>
   </div>
 </template>
-
 
 <style scoped>
 .icon-page {
@@ -90,6 +83,4 @@ export default Vue.extend({
   flex-wrap: wrap;
   width: 100%;
 }
-
-
 </style>

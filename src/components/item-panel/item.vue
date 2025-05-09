@@ -1,24 +1,23 @@
 <script lang="ts">
-import Vue, {PropType} from "vue";
+import Vue, { PropType } from "vue";
 
 export default Vue.extend({
   name: "item-panel-item",
   props: {
     item: {
       type: Object as PropType<{
-        icon: string,
-        type: string,
+        icon: string;
+        type: string;
       }>,
       required: true,
-    }
+    },
   },
 });
-
 </script>
 
 <template>
   <div class="icon-item">
-    <img :src="item.icon" alt="" class="icon-img"/>
+    <img :src="item.icon" alt="" class="icon-img" />
     <div class="icon-label">{{ item.type }}</div>
   </div>
 </template>

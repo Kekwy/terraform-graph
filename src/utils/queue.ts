@@ -11,8 +11,7 @@ export interface Queue<T> {
 }
 
 class QueueNode<T> {
-  constructor(public value: T, public next: QueueNode<T> | null = null) {
-  }
+  constructor(public value: T, public next: QueueNode<T> | null = null) {}
 }
 
 export class LinkedListQueue<T> implements Queue<T> {

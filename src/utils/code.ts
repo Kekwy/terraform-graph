@@ -1,9 +1,9 @@
-import {globalVar} from "@/store";
-import {Node} from "@antv/x6";
-import {LinkedListQueue, Queue} from "@/utils/queue";
-import {message} from "ant-design-vue";
-import {executeAnimate, stopAnimate} from "@/utils/graph-util";
-import {CellStatus, NodeData, Variable} from "@/node";
+import { globalVar } from "@/store";
+import { Node } from "@antv/x6";
+import { LinkedListQueue, Queue } from "@/utils/queue";
+import { message } from "ant-design-vue";
+import { executeAnimate, stopAnimate } from "@/utils/graph-util";
+import { CellStatus, NodeData, Variable } from "@/node";
 
 export const generate = async () => {
   const graph = globalVar.graph;
@@ -37,7 +37,9 @@ export const generate = async () => {
     const outgoingEdges = graph.getOutgoingEdges(node);
     const dependency: string[] = [];
     outgoingEdges?.forEach((edge) => {
-      dependency.push("module." + edge.getTargetNode()?.getData<NodeData>().module.name);
+      dependency.push(
+        "module." + edge.getTargetNode()?.getData<NodeData>().module.name
+      );
     });
     // 2.2 生成当前结点对应的 terraform 代码
     generateModuleCode(nodeData.module, builder, dependency);
@@ -47,14 +49,15 @@ export const generate = async () => {
       outgoingEdges?.forEach((edge) => {
         stopAnimate(edge, node);
       });
-    }, 600)
+    }, 600);
     // 2.4 遍历子结点
     graph.getIncomingEdges(node)?.forEach((edge) => {
       // 2.4.1 开启边动画
       executeAnimate(edge);
       // 2.4.2 选中出度为 0 的结点加入队列
       const sourceNode = edge.getSourceNode() as Node;
-      const inDegree = nodesWithOutDegree.get(sourceNode?.id as string) as number - 1;
+      const inDegree =
+        (nodesWithOutDegree.get(sourceNode?.id as string) as number) - 1;
       nodesWithOutDegree.set(sourceNode.id, inDegree);
       if (inDegree === 0) {
         queue.push(sourceNode);
@@ -72,34 +75,40 @@ export const generate = async () => {
         // 关闭边的动画
         graph.getOutgoingEdges(node)?.forEach((edge) => {
           stopAnimate(edge, node);
-        })
+        });
       }
-    })
+    });
     return;
   }
   const filename = "main.tf";
-  const file = new File([builder.build()], filename, {type: 'text/plain'});
+  const file = new File([builder.build()], filename, { type: "text/plain" });
   const url = URL.createObjectURL(file);
 
-  const a = document.createElement('a');
+  const a = document.createElement("a");
   a.href = url;
   a.download = filename;
   a.click();
 
   setTimeout(() => URL.revokeObjectURL(url), 100);
   return;
-}
+};
 
 const generateHelper = (module: any, builder: CodeBuilder, level: number) => {
   Object.keys(module).forEach((key) => {
     if (key !== "name") {
       builder.indent(level);
       if (typeof module[key] === "string") {
-        builder.append(key).append(" = \"").append(module[key]).append("\"");
+        builder.append(key).append(' = "').append(module[key]).append('"');
       } else if (typeof module[key] === "number") {
-        builder.append(key).append(" = ").append((module[key] as number).toString());
+        builder
+          .append(key)
+          .append(" = ")
+          .append((module[key] as number).toString());
       } else if (Array.isArray(module[key])) {
-        builder.append(key).append(" = ").append(JSON.stringify(module[key] as any[]));
+        builder
+          .append(key)
+          .append(" = ")
+          .append(JSON.stringify(module[key] as any[]));
       } else if (module[key] instanceof Variable) {
         builder.append(key).append(" = ").append(module[key].value);
       } else if (typeof module[key] === "object") {
@@ -107,15 +116,21 @@ const generateHelper = (module: any, builder: CodeBuilder, level: number) => {
         generateHelper(module[key], builder, level + 1);
         builder.indent(level).append("}");
       } else {
-        message.error("不支持的类型 " + key + ": " + JSON.stringify(module[key]));
+        message.error(
+          "不支持的类型 " + key + ": " + JSON.stringify(module[key])
+        );
       }
       builder.newLine();
     }
   });
-}
+};
 
-const generateModuleCode = (module: any, builder: CodeBuilder, dependency: string[]) => {
-  builder.append("module \"").append(module.name).append("\" {").newLine();
+const generateModuleCode = (
+  module: any,
+  builder: CodeBuilder,
+  dependency: string[]
+) => {
+  builder.append('module "').append(module.name).append('" {').newLine();
   generateHelper(module, builder, 1);
   if (dependency.length > 0) {
     builder.indent(1).append("depends_on = [");
@@ -127,7 +142,7 @@ const generateModuleCode = (module: any, builder: CodeBuilder, dependency: strin
     builder.append("]").newLine();
   }
   builder.append("}").newLine().newLine();
-}
+};
 
 class CodeBuilder {
   private content: string[] = [];

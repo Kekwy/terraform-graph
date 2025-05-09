@@ -7,4 +7,4 @@ interface GlobalVar {
 
 export const globalVar: GlobalVar = Vue.observable({
   graph: null as any,
-})
+});

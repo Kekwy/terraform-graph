@@ -1,22 +1,22 @@
 <script lang="ts">
-import {defineComponent} from "vue";
+import { defineComponent } from "vue";
 import ItemPanel from "@/components/item-panel/index.vue";
 
 export default defineComponent({
   name: "HomeView",
-  components: {ItemPanel},
+  components: { ItemPanel },
   data() {
     return {
       collapsed: false,
     };
-  }
-})
+  },
+});
 </script>
 
 <template>
   <a-layout id="components-layout-demo-top-side-2">
     <a-layout-header class="header">
-      <div class="logo"/>
+      <div class="logo" />
       <!--      <a-menu-->
       <!--          theme="dark"-->
       <!--          mode="horizontal"-->
@@ -36,11 +36,18 @@ export default defineComponent({
     </a-layout-header>
     <a-layout>
       <a-layout-sider width="200" style="background: #fff">
-        <item-panel/>
+        <item-panel />
       </a-layout-sider>
       <a-layout style="padding: 24px">
-        <a-layout-content :style="{ background: 'none', padding: 0, margin: 0, minHeight: '280px' }">
-          <router-view/>
+        <a-layout-content
+          :style="{
+            background: 'none',
+            padding: 0,
+            margin: 0,
+            minHeight: '280px',
+          }"
+        >
+          <router-view />
         </a-layout-content>
       </a-layout>
     </a-layout>

@@ -1,7 +1,7 @@
 <script lang="ts">
 export default {
   name: "App",
-}
+};
 </script>
 
 <template>
@@ -10,13 +10,12 @@ export default {
   </div>
 </template>
 
-
 <style scoped>
 :root {
   --header-height: 55px;
   --nav-height: 55px;
   /*--graph-background: #F2F7FA;*/
-  --graph-background: #FFF;
+  --graph-background: #fff;
   /*--text-color: var(--el-text-color-primary);
   --brand-color: var(--el-color-primary);*/
 }
@@ -31,10 +30,10 @@ export default {
   height: 100vh; /* 全屏高度 */
 }
 
-body, html {
+body,
+html {
   overflow: hidden;
   margin: 0;
   padding: 0;
 }
-
 </style>

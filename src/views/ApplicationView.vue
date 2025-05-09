@@ -1,9 +1,8 @@
 <script lang="ts">
-
-import Vue, {nextTick} from "vue";
-import {GraphUtil} from "@/utils/graph-util";
-import {Graph, Node} from "@antv/x6";
-import {eventBus, EventEnum} from "@/utils/event-bus";
+import Vue, { nextTick } from "vue";
+import { GraphUtil } from "@/utils/graph-util";
+import { Graph, Node } from "@antv/x6";
+import { eventBus, EventEnum } from "@/utils/event-bus";
 import ConfigPanel from "@/components/config-panel/index.vue";
 import DesignerToolBar from "@/components/designer-tool-bar/index.vue";
 
@@ -16,7 +15,7 @@ interface ComponentData {
 export default Vue.extend({
   name: "ApplicationView",
 
-  components: {DesignerToolBar, ConfigPanel},
+  components: { DesignerToolBar, ConfigPanel },
 
   computed: {
     events(): Map<EventEnum, () => void> {
@@ -36,9 +35,11 @@ export default Vue.extend({
   mounted() {
     nextTick(() => {
       // 创建画布
-      this.graph = GraphUtil.initGraph(this.$refs.graphContainer as HTMLElement);
+      this.graph = GraphUtil.initGraph(
+        this.$refs.graphContainer as HTMLElement
+      );
       eventBus.emit(EventEnum.GRAPH_INITIATED);
-    })
+    });
   },
 
   beforeDestroy() {
@@ -74,29 +75,36 @@ export default Vue.extend({
       graph: null as any,
       visible: false,
       selectedNode: null as any,
-    }
-  }
-})
+    };
+  },
+});
 </script>
 
 <template>
-  <div style="background: none; width: 100%; height: 100%; min-width: 750px; display: flex; flex-direction: column;">
-    <designer-tool-bar style="height: 48px;"/>
-    <div style="width: 100%; flex: 1;">
-      <div ref="graphContainer"/>
+  <div
+    style="
+      background: none;
+      width: 100%;
+      height: 100%;
+      min-width: 750px;
+      display: flex;
+      flex-direction: column;
+    "
+  >
+    <designer-tool-bar style="height: 48px" />
+    <div style="width: 100%; flex: 1">
+      <div ref="graphContainer" />
     </div>
     <a-drawer
-        title="配置面板"
-        :width="500"
-        :visible="visible"
-        :body-style="{ paddingBottom: '80px' }"
-        @close="onClose"
+      title="配置面板"
+      :width="500"
+      :visible="visible"
+      :body-style="{ paddingBottom: '80px' }"
+      @close="onClose"
     >
-      <config-panel :selectedNode="selectedNode"/>
+      <config-panel :selectedNode="selectedNode" />
     </a-drawer>
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

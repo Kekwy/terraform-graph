@@ -1,16 +1,16 @@
 <script lang="ts">
-import {useRoute} from "vue-router/composables";
+import { useRoute } from "vue-router/composables";
 import Vue from "vue";
-import {Route} from "vue-router";
-import {generate} from "@/utils/code";
-import {refreshNodeStatus} from "@/utils/graph-util";
+import { Route } from "vue-router";
+import { generate } from "@/utils/code";
+import { refreshNodeStatus } from "@/utils/graph-util";
 
 export default Vue.extend({
   name: "designer-tool-bar",
   data() {
     return {
       loading: false as any,
-    }
+    };
   },
   computed: {
     route(): Route {
@@ -18,19 +18,19 @@ export default Vue.extend({
     },
     currentRoute(): string | undefined | null {
       return this.route.name;
-    }
+    },
   },
   methods: {
     onClickRefreshButton() {
       refreshNodeStatus();
     },
     onClickDownloadButton() {
-      this.loading = {delay: 500};
+      this.loading = { delay: 500 };
       generate().then(() => {
         this.loading = false;
       });
     },
-  }
+  },
 });
 </script>
 
@@ -42,30 +42,36 @@ export default Vue.extend({
       <div class="left-section">
         <!--  TODO: 待加入实际功能      -->
         <a-dropdown style="width: 120px" :trigger="['click']" :disabled="true">
-          <a-menu slot="overlay" style="user-select: none;  /* 标准属性 */
-                                        -webkit-user-select: none; /* Chrome/Safari */
-                                        -moz-user-select: none;    /* Firefox */
-                                        -ms-user-select: none;     /* IE10+ */"
-                  :selectedKeys="[currentRoute]">
+          <a-menu
+            slot="overlay"
+            style="
+              user-select: none; /* 标准属性 */
+              -webkit-user-select: none; /* Chrome/Safari */
+              -moz-user-select: none; /* Firefox */
+              -ms-user-select: none; /* IE10+ */
+            "
+            :selectedKeys="[currentRoute]"
+          >
             <a-menu-item key="1"> Redis</a-menu-item>
             <a-menu-item key="2"> MySQL</a-menu-item>
             <a-menu-item key="3"> Zookeeper</a-menu-item>
           </a-menu>
-          <a-button style="margin-left: 8px"> Unknown
-            <a-icon type="down"/>
+          <a-button style="margin-left: 8px">
+            Unknown
+            <a-icon type="down" />
           </a-button>
         </a-dropdown>
         <!--  TODO: 待加入实际功能      -->
         <a-select
-            :disabled="true"
-            style="width: 140px; margin-left: 10px"
-            placeholder="Unknown"
+          :disabled="true"
+          style="width: 140px; margin-left: 10px"
+          placeholder="Unknown"
         >
           <a-select-option value="comp1">Unknown</a-select-option>
         </a-select>
         <!--  TODO: 待加入实际功能      -->
         <a-tag color="green" style="margin-left: 10px">
-          <a-icon type="check-circle"/>
+          <a-icon type="check-circle" />
           Unknown
         </a-tag>
       </div>
@@ -74,31 +80,31 @@ export default Vue.extend({
       <!-- 重置画布中结点状态的按钮 -->
       <div class="right-section">
         <a-button
-            style="border-color: #1890ff; color: #1890ff"
-            size="small"
-            @click="onClickRefreshButton"
+          style="border-color: #1890ff; color: #1890ff"
+          size="small"
+          @click="onClickRefreshButton"
         >
-          <a-icon type="reload"/>
+          <a-icon type="reload" />
           重置
         </a-button>
         <!-- 启动代码生成并且下载代码文件的按钮 -->
         <a-button
-            type="primary"
-            style="margin-left: 10px"
-            size="small"
-            @click="onClickDownloadButton"
-            :loading="loading"
+          type="primary"
+          style="margin-left: 10px"
+          size="small"
+          @click="onClickDownloadButton"
+          :loading="loading"
         >
-          <a-icon type="download" v-if="!loading"/>
+          <a-icon type="download" v-if="!loading" />
           生成代码
         </a-button>
 
         <!--  TODO: 待加入实际功能      -->
         <a-button
-            :disabled="true"
-            type="danger"
-            style="margin-left: 10px"
-            size="small"
+          :disabled="true"
+          type="danger"
+          style="margin-left: 10px"
+          size="small"
         >
           Unknown
         </a-button>

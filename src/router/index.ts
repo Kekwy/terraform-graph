@@ -1,7 +1,6 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from "vue";
+import Router from "vue-router";
 import HomeView from "@/views/HomeView.vue";
-import TestView from "@/views/TestView.vue";
 import homeRoutes from "@/router/home";
 
 Vue.use(Router);
@@ -11,22 +10,17 @@ const router = new Router({
   routes: [
     {
       name: "/",
-      path: '/',
-      redirect: '/home',
+      path: "/",
+      redirect: "/home",
     },
     {
       name: "home",
-      path: '/home',
-      redirect: '/home/application',
+      path: "/home",
+      redirect: "/home/application",
       component: HomeView,
-      children: [...homeRoutes]
+      children: [...homeRoutes],
     },
-    {
-      name: "test",
-      path: '/test',
-      component: TestView
-    }
-  ]
+  ],
 });
 
 export default router;
