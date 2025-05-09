@@ -2,7 +2,7 @@
 <script lang="ts">
 import Vue, {PropType} from "vue";
 import {Node} from "@antv/x6";
-import {NodeData} from "@/node/types";
+import {NodeData} from "@/node";
 import DynamicFormItem from "@/components/config-panel/dynamic-form-item.vue";
 
 export default Vue.extend({

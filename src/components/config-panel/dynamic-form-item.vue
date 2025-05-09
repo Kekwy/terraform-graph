@@ -2,7 +2,7 @@
 <script lang="ts">
 import Vue, {PropType} from "vue";
 import {Ref} from "@/utils/ref";
-import {Variable} from "@/node/types";
+import {Variable} from "@/node";
 
 export default Vue.extend({
   name: "dynamic-form-item",

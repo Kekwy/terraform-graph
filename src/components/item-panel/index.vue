@@ -1,20 +1,5 @@
-<template>
-  <div class="icon-page">
-    <div class="icon-row">
-      <div
-          v-for="(item, index) in items"
-          :key="index"
-      >
-        <div @mousedown="onMousedown($event, item)">
-          <item-panel-item :item="item"/>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script lang="ts">
-import {NodeProp, nodes} from "@/node/types";
+import {NodeProp, nodes} from "@/node";
 import ItemPanelItem from "@/components/item-panel/item.vue";
 import {eventBus, EventEnum} from "@/utils/event-bus";
 import {Dnd} from "@antv/x6-plugin-dnd";
@@ -50,6 +35,7 @@ export default Vue.extend({
     items() {
       return nodes.values();
     },
+    // 需要监听的事件总线的事件及其处理方法
     events(): Map<EventEnum, () => void> {
       return new Map<EventEnum, () => void>([
         [EventEnum.GRAPH_INITIATED, this.handleGraphInitiated]
@@ -63,17 +49,35 @@ export default Vue.extend({
     }
   },
   beforeMount() {
+    // 注册监听事件的处理方法
     this.events.forEach((handler: () => void, event: EventEnum) => {
       eventBus.on(event, handler);
     });
   },
   beforeDestroy() {
+    // 移除监听事件的处理方法
     this.events.forEach((handler: () => void, event: EventEnum) => {
       eventBus.off(event, handler);
     });
   }
 });
 </script>
+
+<template>
+  <div class="icon-page">
+    <div class="icon-row">
+      <div
+          v-for="(item, index) in items"
+          :key="index"
+      >
+        <div @mousedown="onMousedown($event, item)">
+          <item-panel-item :item="item"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
 
 <style scoped>
 .icon-page {

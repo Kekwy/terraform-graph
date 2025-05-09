@@ -1,39 +1,44 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import {Node} from '@antv/x6'
-import {CellStatus, createEdge, createNode, getDownstreamNodePosition, NODE_TYPE_LOGO, NodeType} from '@/node'
-import {NodeData, NodeProp, nodes} from "@/node/types";
+import {CellStatus, NodeProp, nodes, NodeType} from '@/node'
 import {eventBus, EventEnum} from "@/utils/event-bus";
+import {createEdge, createNode, getDownstreamNodePosition} from "@/utils/graph-util";
 
 export default defineComponent({
   name: 'DeploymentDagNode',
 
   inject: ["getNode"],
+
   beforeMount() {
     this.node = (this as any).getNode();
     this.data = this.node.getData();
     this.node.on('change:data', ({current}) => {
       this.data = current
     })
-    console.log(this.node)
   },
+
   methods: {
+    // 发送打开结点配置面板事件
     onDblclick() {
-      eventBus.emit(EventEnum.NODE_DBLCLICK, this.node);
+      eventBus.emit(EventEnum.NODE_OPEN_CONFIG_PANEL, this.node);
     },
+    // TODO: 为加号按钮添加实际功能
     onPlusDropdownOpenChange(val: boolean) {
       this.plusActionSelected = val
     },
+    // TODO
     clickPlusDragMenu(type: NodeType) {
       const node = this.node as Node
       const graph = node.model?.graph
       if (graph) {
         const pos = getDownstreamNodePosition(node, graph)
-        const newNode = createNode(type, graph, pos)
+        const newNode = createNode(nodes.get(type) as NodeProp, graph, pos)
         createEdge(node.id, newNode.id, graph)
       }
       this.plusActionSelected = false
     },
+    // 鼠标进入和离开时切换切换结点样式
     onMainMouseEnter() {
       const node = this.node as Node
       node.getPorts().forEach((port) => {
@@ -52,7 +57,11 @@ export default defineComponent({
         })
       })
     },
+    onMoreActionClick() {
+      eventBus.emit(EventEnum.NODE_OPEN_CONFIG_PANEL, this.node);
+    },
   },
+
   computed: {
     name() {
       return this.data.module.name;
@@ -65,9 +74,6 @@ export default defineComponent({
     },
     CellStatus() {
       return CellStatus
-    },
-    NODE_TYPE_LOGO() {
-      return NODE_TYPE_LOGO
     },
     type() {
       return this.data.type;
@@ -82,6 +88,7 @@ export default defineComponent({
       return (nodes.get(this.type) as NodeProp).icon;
     }
   },
+
   data() {
     return {
       plusActionSelected: false,
@@ -96,24 +103,28 @@ export default defineComponent({
   <div class="deployment-dag-node" @dblclick="onDblclick">
     <div class="main-area" @mouseenter="onMainMouseEnter" @mouseleave="onMainMouseLeave">
       <div class="main-info">
+        <!-- 结点图标 -->
         <i class="node-logo" :style="{ backgroundImage: `url(${iconUrl})` }"/>
+        <!-- 若结点名称过长，则显示省咯号，并使用 tooltip 显示其完整名称 -->
         <a-tooltip v-if="name.length>14" :title="name" :mouseEnterDelay="0.8">
           <div class="ellipsis-row node-name">{{ `${name.slice(0, 10)}...` }}</div>
         </a-tooltip>
         <div v-else class="ellipsis-row node-name">{{ name }}</div>
       </div>
       <div class="status-action">
+        <!-- 结点状态图标 -->
         <a-tooltip v-show="status === CellStatus.ERROR" :title="statusMsg">
           <i class="status-icon status-icon-error"/>
         </a-tooltip>
         <i v-show="status === CellStatus.SUCCESS" class="status-icon status-icon-success"/>
-        <div class="more-action-container">
+        <!-- 配置面板按钮 -->
+        <div class="more-action-container"  @click="onMoreActionClick">
           <i class="more-action"/>
         </div>
       </div>
     </div>
-
-    <div class="plus-dag" v-if="type !== NodeType.OUTPUT">
+    <!-- 点击加号按钮时可以打开下拉菜单，可以快捷创建最近使用的节点，并且建立依赖边 -->
+    <div class="plus-dag">
       <a-dropdown
           placement="bottomCenter"
           :open="plusActionSelected"
@@ -123,15 +134,7 @@ export default defineComponent({
       >
         <template #overlay>
           <ul>
-            <!--            <li-->
-            <!--                class="each-sub-menu"-->
-            <!--                v-for="item in PROCESSING_TYPE_LIST()"-->
-            <!--                :key="item.type"-->
-            <!--                @click="clickPlusDragMenu(item.type)"-->
-            <!--            >-->
-            <!--              <i class="node-mini-logo" :style="{ backgroundImage: `url(${NODE_TYPE_LOGO.get(item.type)})` }"/>-->
-            <!--              <span>{{ item.name }}</span>-->
-            <!--            </li>-->
+            <!-- TODO: 为下拉菜单添加实际功能 -->
           </ul>
         </template>
         <i :class="['plus-action', { 'plus-action-selected': plusActionSelected }]"/>
@@ -140,8 +143,7 @@ export default defineComponent({
   </div>
 </template>
 
-
-<style>
+<style scoped>
 .deployment-dag-node {
   display: flex;
   flex-direction: row;

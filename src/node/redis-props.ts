@@ -1,5 +1,5 @@
 import RedisIcon from "@/assets/icons/redis-opened-svgrepo-com.svg";
-import {NodeData, NodeProp, NodeType, Variable} from "@/node/types";
+import {NodeData, NodeProp, NodeType, Variable} from "@/node";
 import {CellStatus} from "@/node/index";
 
 export class RedisProp implements NodeProp {

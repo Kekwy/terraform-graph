@@ -29,11 +29,7 @@ export default Vue.extend({
       generate().then(() => {
         this.loading = false;
       });
-      console.log('Service Endpoint clicked');
     },
-    handleRecycle() {
-      console.log('Recycle clicked');
-    }
   }
 });
 </script>
@@ -85,7 +81,7 @@ export default Vue.extend({
           <a-icon type="reload"/>
           重置
         </a-button>
-
+        <!-- 启动代码生成并且下载代码文件的按钮 -->
         <a-button
             type="primary"
             style="margin-left: 10px"
@@ -97,28 +93,17 @@ export default Vue.extend({
           生成代码
         </a-button>
 
+        <!--  TODO: 待加入实际功能      -->
         <a-button
             :disabled="true"
             type="danger"
             style="margin-left: 10px"
             size="small"
-            @click="handleRecycle"
         >
           Unknown
         </a-button>
       </div>
     </div>
-
-    <!--    &lt;!&ndash; 底部选项卡 &ndash;&gt;-->
-    <!--    <div class="tabs-section">-->
-    <!--      <a-tabs-->
-    <!--          v-model="activeTab"-->
-    <!--          :tabBarStyle="{ marginBottom: 0 }"-->
-    <!--      >-->
-    <!--        <a-tab-pane tab="Overview" key="overview" />-->
-    <!--        <a-tab-pane tab="Resource Graph" key="resourceGraph" />-->
-    <!--      </a-tabs>-->
-    <!--    </div>-->
   </div>
 </template>
 

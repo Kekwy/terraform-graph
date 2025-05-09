@@ -1,5 +1,5 @@
 import MySQLIcon from "@/assets/icons/mysql-logo-svgrepo-com.svg";
-import {NodeData, NodeProp, NodeType, Variable} from "@/node/types";
+import {NodeData, NodeProp, NodeType, Variable} from "@/node";
 import {CellStatus} from "@/node/index";
 
 export class MySQLProp implements NodeProp {

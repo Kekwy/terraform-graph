@@ -1,6 +1,5 @@
 <script lang="ts">
 
-import {mapActions} from 'vuex'
 import Vue, {nextTick} from "vue";
 import {GraphUtil} from "@/utils/graph-util";
 import {Graph, Node} from "@antv/x6";
@@ -16,20 +15,24 @@ interface ComponentData {
 
 export default Vue.extend({
   name: "ApplicationView",
+
   components: {DesignerToolBar, ConfigPanel},
+
   computed: {
     events(): Map<EventEnum, () => void> {
       return new Map<EventEnum, (...arg: any[]) => void>([
-        [EventEnum.NODE_DBLCLICK, this.handleNodeDblclick],
+        [EventEnum.NODE_OPEN_CONFIG_PANEL, this.handleNodeDblclick],
         [EventEnum.NODE_UNSELECTED, this.handleNodeUnselected],
       ]);
     },
   },
+
   beforeMount() {
     this.events.forEach((handler, event) => {
       eventBus.on(event, handler);
     });
   },
+
   mounted() {
     nextTick(() => {
       // 创建画布
@@ -37,13 +40,14 @@ export default Vue.extend({
       eventBus.emit(EventEnum.GRAPH_INITIATED);
     })
   },
+
   beforeDestroy() {
     this.events.forEach((handler, event) => {
       eventBus.off(event, handler);
     });
   },
+
   methods: {
-    ...mapActions(['addResource', 'updateResource', 'connectNodes']),
     handleNodeDblclick(selectedNode: Node) {
       this.selectedNode = selectedNode;
       this.showDrawer();
@@ -64,6 +68,7 @@ export default Vue.extend({
       this.graph.cleanSelection();
     },
   },
+
   data(): ComponentData {
     return {
       graph: null as any,

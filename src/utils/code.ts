@@ -3,8 +3,7 @@ import {Node} from "@antv/x6";
 import {LinkedListQueue, Queue} from "@/utils/queue";
 import {message} from "ant-design-vue";
 import {executeAnimate, stopAnimate} from "@/utils/graph-util";
-import {NodeData, Variable} from "@/node/types";
-import {CellStatus} from "@/node";
+import {CellStatus, NodeData, Variable} from "@/node";
 
 export const generate = async () => {
   const graph = globalVar.graph;
