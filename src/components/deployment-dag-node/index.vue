@@ -69,9 +69,6 @@ export default defineComponent({
     nodes() {
       return nodes
     },
-    NodeType() {
-      return NodeType
-    },
     CellStatus() {
       return CellStatus
     },
@@ -143,7 +140,7 @@ export default defineComponent({
   </div>
 </template>
 
-<style scoped>
+<style>
 .deployment-dag-node {
   display: flex;
   flex-direction: row;

@@ -1,4 +1,4 @@
-import {Edge, Graph, Node, Path, StringExt} from "@antv/x6";
+import {Edge, Graph, Path} from "@antv/x6";
 import DeploymentDagNode from "@/components/deployment-dag-node/index.vue";
 import {register} from "@antv/x6-vue-shape";
 import {RedisProp} from "@/node/redis-props";
@@ -46,6 +46,7 @@ export const nodes = new Map<NodeType, NodeProp>([
 
 export class Variable {
   value: string;
+
   constructor(value: string) {
     this.value = value;
   }
@@ -102,9 +103,6 @@ export const registerShapeType = () => {
   Graph.registerConnector(
     'curveConnector',
     (sourcePoint, targetPoint) => {
-      // const tmp = sourcePoint;
-      // sourcePoint = targetPoint;
-      // targetPoint = tmp;
       const hgap = Math.abs(targetPoint.x - sourcePoint.x)
       const path = new Path()
       path.appendSegment(
@@ -179,5 +177,5 @@ export const registerShapeType = () => {
     },
   })
 
-  Graph.registerEdge('data-processing-curve', Edge, true)
+  Graph.registerEdge('deployment-curve', Edge, true)
 }

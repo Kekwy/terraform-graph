@@ -34,7 +34,7 @@ export const createNode = (
 export const createEdge = (source: string, target: string, graph: Graph) => {
   const edge = {
     id: StringExt.uuid(),
-    shape: 'data-processing-curve',
+    shape: 'deployment-curve',
     source: {
       cell: source,
       port: `${source}-out`,
@@ -285,10 +285,6 @@ export namespace GraphUtil {
   const createGraph = (container: HTMLElement): Graph => {
     const graph = new Graph({
       container: container,
-      // width: 100000,
-      // height: 100000,
-      // width: '100%',
-      // height: '100%',
       autoResize: true,
       mousewheel: { // 画布缩放
         enabled: true,
@@ -331,7 +327,7 @@ export namespace GraphUtil {
         },
         createEdge() {
           return this.createEdge({
-            shape: 'data-processing-curve',
+            shape: 'deployment-curve',
             attrs: {
               line: {
                 strokeDasharray: '5 5',
