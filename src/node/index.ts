@@ -3,6 +3,7 @@ import DeploymentDagNode from "@/components/deployment-dag-node/index.vue";
 import { register } from "@antv/x6-vue-shape";
 import { RedisProp } from "@/node/redis-props";
 import { MySQLProp } from "@/node/mysql-props";
+import {PostgresqlProps, RedisClusterProps} from "@/node/props";
 
 // 元素校验状态
 export enum CellStatus {
@@ -18,8 +19,18 @@ export interface Position {
 }
 
 export enum NodeType {
-  REDIS = "redis",
-  MYSQL = "mysql",
+  REDIS = "k8s-redis",
+  REDIS_CLUSTER = "k8s-rediscluster",
+  MYSQL = "vsphere-mysql",
+  ORACLE = "vsphere-oracle",
+  POSTGRESQL = "vsphere-postgresql",
+  MONGODB = "vsphere-mongodb",
+  OPENGUASS = "openstack-openguass",
+  NGINX = "openstack-nginx",
+  NAMESPACE = "k8s-namespace",
+  KAFKA_ZOOKEEPER = "k8s-kafka-zookeeper",
+  ES_KI = "k8s-es-ki",
+  ABC = "abc",
 }
 
 export interface NodeProp {
@@ -42,6 +53,8 @@ export interface NodeData {
 export const nodes = new Map<NodeType, NodeProp>([
   [NodeType.REDIS, new RedisProp()],
   [NodeType.MYSQL, new MySQLProp()],
+  [NodeType.REDIS_CLUSTER, new RedisClusterProps()],
+  [NodeType.POSTGRESQL, new PostgresqlProps()],
 ]);
 
 export class Variable {

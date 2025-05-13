@@ -112,6 +112,7 @@ export default Vue.extend({
               :title="element"
             >
               <a-tag
+                color="geekblue"
                 :key="element"
                 :closable="!fixed.has(key) && !disabled"
                 @close="onTagClose(key, index)"
@@ -120,6 +121,7 @@ export default Vue.extend({
               </a-tag>
             </a-tooltip>
             <a-tag
+              color="geekblue"
               v-else
               :key="element"
               :closable="!fixed.has(key) && !disabled"

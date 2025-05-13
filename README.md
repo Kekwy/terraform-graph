@@ -3,32 +3,22 @@
 <div id="tags">
 <img alt="terraform" src="https://img.shields.io/badge/terraform-8A2BE2">
 <img alt="vue" src="https://img.shields.io/badge/vue-2.6.14-42b883">
-<a href="https://1x.antdv.com/docs/vue/getting-started-cn/"><img alt="ant design" src="https://img.shields.io/badge/ant%20design-1.7.8-1890ff"></a>
+<a href="https://1x.antdv.com/docs/vue/getting-started-cn/"><img alt="ant design vue" src="https://img.shields.io/badge/ant%20design-1.7.8-1890ff"></a>
 <img alt="antv x6" src="https://img.shields.io/badge/antv%20x6-2.18.1-orange">
 <img alt="Github Last Commit" src="https://img.shields.io/github/last-commit/Kekwy/terraform-graph">
 </div>
 
+> Terraform 代码可视化建模工具
 
+## 快速开始
 
-## Project setup
-```
+```shell
 npm install
-```
-
-### Compiles and hot-reloads for development
-```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## 更新日志
 
-### Lints and fixes files
-```
-npm run lint
-```
+2025/5/13
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- 加入示例代码中的所有 module。

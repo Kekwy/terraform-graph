@@ -43,6 +43,11 @@ export default Vue.extend({
 
 <template>
   <a-form layout="vertical">
+    <a-descriptions>
+      <a-descriptions-item key="module-name" label="类型">
+        {{ nodeData.type }}
+      </a-descriptions-item>
+    </a-descriptions>
     <dynamic-form-item
       :fixed="nodeData?.fixed_value || emptySet"
       :model-ref="{ value: nodeData?.module || {} }"

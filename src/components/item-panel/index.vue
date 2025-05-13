@@ -29,8 +29,8 @@ export default Vue.extend({
     },
   },
   computed: {
-    items() {
-      return nodes.values();
+    items(): NodeProp[] {
+      return nodes.values().toArray();
     },
     // 需要监听的事件总线的事件及其处理方法
     events(): Map<EventEnum, () => void> {
@@ -61,15 +61,18 @@ export default Vue.extend({
 </script>
 
 <template>
-  <div class="icon-page">
-    <div class="icon-row">
-      <div v-for="(item, index) in items" :key="index">
-        <div @mousedown="onMousedown($event, item)">
-          <item-panel-item :item="item" />
-        </div>
+  <a-list
+    item-layout="horizontal"
+    :data-source="items"
+    class="icon-page"
+    size="small"
+  >
+    <a-list-item slot="renderItem" slot-scope="item">
+      <div @mousedown="onMousedown($event, item)" style="width: 100%">
+        <item-panel-item :item="item" />
       </div>
-    </div>
-  </div>
+    </a-list-item>
+  </a-list>
 </template>
 
 <style scoped>

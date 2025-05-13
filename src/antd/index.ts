@@ -3,6 +3,7 @@ import {
   Breadcrumb,
   Button,
   Collapse,
+  Descriptions,
   Drawer,
   Dropdown,
   Form,
@@ -55,6 +56,9 @@ const initAntd = () => {
   Vue.component("AFormItem", Form.Item);
   Vue.component("AInput", Input);
   Vue.component("AInputNumber", InputNumber);
+  // a-descriptions
+  Vue.component("ADescriptions", Descriptions);
+  Vue.component("ADescriptionsItem", Descriptions.Item);
 };
 
 export default initAntd;

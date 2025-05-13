@@ -18,25 +18,27 @@ export default Vue.extend({
 <template>
   <div class="icon-item">
     <img :src="item.icon" alt="" class="icon-img" />
-    <div class="icon-label">{{ item.type }}</div>
+    <span class="icon-label"> {{ item.type }} </span>
   </div>
 </template>
 
 <style scoped>
 .icon-item {
-  width: 40px;
-  text-align: center;
   margin: 5px;
+  display: flex;
+  vertical-align: middle;
 }
 
 .icon-img {
-  width: 36px;
-  height: 36px;
-  margin-bottom: 5px;
+  width: 24px;
+  height: 24px;
+  margin-right: 16px;
 }
 
 .icon-label {
-  font-size: 12px;
-  color: #333;
+  width: auto;
+  display: flex;
+  align-items: center;
+
 }
 </style>

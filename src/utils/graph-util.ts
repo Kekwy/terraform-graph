@@ -178,7 +178,9 @@ export namespace GraphUtil {
       .getNodes()
       .filter((item) => item.getData()?.type === type);
     if (sameTypeNodes.length > 0) {
-      nodeData.module.name = `${nodeData.module.name}_${sameTypeNodes.length}`;
+      nodeData.module.name = `${nodeData.type}_${sameTypeNodes.length}`;
+    } else {
+      nodeData.module.name = nodeData.type;
     }
     const id = StringExt.uuid();
     const nodeMetadata = {

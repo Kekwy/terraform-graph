@@ -1,11 +1,11 @@
-import RedisIcon from "@/assets/icons/redis-opened-svgrepo-com.svg";
+import RedisIcon from "@/assets/icons/redis-svgrepo-com.svg";
 import { NodeData, NodeProp, NodeType, Variable } from "@/node";
 import { CellStatus } from "@/node/index";
 
 export class RedisProp implements NodeProp {
   readonly attrText = {
     // 对应属性在配置栏中显示的名称
-    name: "module 名称",
+    name: "实例名称",
     source: "组件入口位置",
     zh_name: "中文名称",
     module_type: "module 类型",
