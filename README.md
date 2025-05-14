@@ -10,6 +10,8 @@
 
 > Terraform 代码可视化建模工具
 
+![image-20250514150542084](./README.assets/image-20250514150542084.png)
+
 ## 快速开始
 
 ```shell

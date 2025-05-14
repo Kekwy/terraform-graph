@@ -43,14 +43,15 @@ export const generate = async () => {
     });
     // 2.2 生成当前结点对应的 terraform 代码
     const success = generateModuleCode(nodeData.module, builder, dependency);
+    console.log(success);
     // 2.3 延时关闭边动画并设置结点状态
     setTimeout(() => {
-      nodeData.status = success? CellStatus.SUCCESS : CellStatus.ERROR;
+      nodeData.status = success ? CellStatus.SUCCESS : CellStatus.ERROR;
       outgoingEdges?.forEach((edge) => {
         stopAnimate(edge, node);
       });
     }, 600);
-    if (!success) continue;
+    if (!success) return;
     // 2.4 遍历子结点
     graph.getIncomingEdges(node)?.forEach((edge) => {
       // 2.4.1 开启边动画
@@ -94,11 +95,20 @@ export const generate = async () => {
   return;
 };
 
-const generateHelper = (module: any, builder: CodeBuilder, level: number): boolean => {
-  Object.keys(module).forEach((key) => {
+const generateHelper = (
+  module: any,
+  builder: CodeBuilder,
+  level: number
+): boolean => {
+  for (const key of Object.keys(module)) {
     if (key !== "name") {
       builder.indent(level);
-      if (typeof module[key] === "string") {
+      if (typeof module[key] === "boolean") {
+        builder
+          .append(key)
+          .append(" = ")
+          .append((module[key] as boolean).toString());
+      } else if (typeof module[key] === "string") {
         builder.append(key).append(' = "').append(module[key]).append('"');
       } else if (typeof module[key] === "number") {
         builder
@@ -125,7 +135,7 @@ const generateHelper = (module: any, builder: CodeBuilder, level: number): boole
       }
       builder.newLine();
     }
-  });
+  }
   return true;
 };
 

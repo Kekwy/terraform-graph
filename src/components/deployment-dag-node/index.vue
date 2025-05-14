@@ -111,7 +111,7 @@ export default defineComponent({
         <!-- 结点图标 -->
         <i class="node-logo" :style="{ backgroundImage: `url(${iconUrl})` }" />
         <!-- 若结点名称过长，则显示省咯号，并使用 tooltip 显示其完整名称 -->
-        <a-tooltip v-if="name.length > 14" :title="name" :mouseEnterDelay="0.8">
+        <a-tooltip v-if="name.length > 12" :title="name" :mouseEnterDelay="0.8">
           <div class="ellipsis-row node-name">
             {{ `${name.slice(0, 10)}...` }}
           </div>
