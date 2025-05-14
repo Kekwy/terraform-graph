@@ -3,7 +3,7 @@ import DeploymentDagNode from "@/components/deployment-dag-node/index.vue";
 import { register } from "@antv/x6-vue-shape";
 import { RedisProp } from "@/node/redis-props";
 import { MySQLProp } from "@/node/mysql-props";
-import {PostgresqlProps, RedisClusterProps} from "@/node/props";
+import {OracleProps, PostgresqlProps, RedisClusterProps} from "@/node/props";
 
 // 元素校验状态
 export enum CellStatus {
@@ -54,6 +54,7 @@ export const nodes = new Map<NodeType, NodeProp>([
   [NodeType.REDIS, new RedisProp()],
   [NodeType.MYSQL, new MySQLProp()],
   [NodeType.REDIS_CLUSTER, new RedisClusterProps()],
+  [NodeType.ORACLE, new OracleProps()],
   [NodeType.POSTGRESQL, new PostgresqlProps()],
 ]);
 

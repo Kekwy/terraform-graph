@@ -6,7 +6,8 @@ import {
   Variable,
 } from "@/node/index";
 import RedisClusterIcon from "@/assets/icons/redis-opened-svgrepo-com.svg";
-import PostgresqlPropsIcon from "@/assets/icons/postgresql-svgrepo-com.svg";
+import PostgresqlIcon from "@/assets/icons/postgresql-svgrepo-com.svg";
+import OracleIcon from "@/assets/icons/oracle-svgrepo-com.svg";
 
 export class RedisClusterProps implements NodeProp {
   readonly icon = RedisClusterIcon;
@@ -82,8 +83,108 @@ export class RedisClusterProps implements NodeProp {
   }
 }
 
+export class OracleProps implements NodeProp {
+  readonly icon = OracleIcon;
+  readonly type = NodeType.ORACLE;
+  readonly fixedValue =
+    // new Set<string>(["name", "source", "zh_name", "module_type", "kubernetes"]);
+    new Set<string>(["source", "zh_name", "module_type", "vsphere", "control", "db"]);
+
+  readonly attrText = {
+    // 对应属性在配置栏中显示的名称
+    name: "实例名称",
+    source: "组件入口位置",
+    zh_name: "中文名称",
+    module_type: "module 类型",
+    vsphere: "平台连接信息",
+    control: "主控节点连接信息",
+    db: "模板连接信息",
+    vm_template: "vm 使用的模板名称",
+    vm_datastore: "vm 使用的数据中心名称",
+    vm_network: "vm 使用的网络名称",
+    vm_netmask: "vm 使用的网络掩码",
+    vm_gateway: "vm 使用的网关地址",
+    vm_linkedClone: "vm 使用的克隆类型",
+    vm_dns: "vm 的 DNS",
+    vm_domain: "vm 的域",
+    vm_timeout: "vm 创建的超时时间(分钟)",
+    wait_create_vm: "vm 创建时间(秒)",
+    vm_ip: "vm 使用的 ip 地址",
+    vm_disk: "vm 的磁盘大小(GB)",
+    vm_cpu: "vm 的 cpu 大小(核)  ",
+    vm_ram: "vm 的内存大小(MB) ",
+    vm_name: "vm 名称",
+    db_name: "db 名称",
+    db_character: "db 字符集",
+    db_collate: "db 排序规则",
+    db_user: "db 用户名",
+    db_password: "db 密码",
+    db_port: "db 端口",
+    db_schema: "db 模式名",
+  };
+
+  data(): NodeData {
+    return {
+      module: {
+        name: "",
+        source: "./modules/vsphere/oracle/",
+        zh_name: "Oracle11g数据库",
+        module_type: "db",
+        vsphere: {
+          cluster: new Variable("var.vsphere_cluster"),
+          datacenter: new Variable("var.vsphere_datacenter"),
+          vcenter: new Variable("var.vsphere_vcenter"),
+          user: new Variable("var.vsphere_user"),
+          password: new Variable("var.vsphere_password"),
+          unverifiedSsl: new Variable("var.vsphere_unverifiedSsl"),
+        },
+        control: {
+          host: new Variable("module.vsphere.oracle_ip"),
+          port: new Variable("var.control_port"),
+          type: new Variable("var.control_type"),
+          user: new Variable("var.control_user"),
+          password: new Variable("var.control_password"),
+          insecure: new Variable("var.control_insecure"),
+        },
+        db: {
+          host_ip: new Variable("var.db_host_ip"),
+          host_port: new Variable("var.db_host_port"),
+          host_user: new Variable("var.db_host_user"),
+          host_password: new Variable("var.db_host_password"),
+        },
+        vm_template: "template_ora11g_yg_20230111",
+        vm_datastore: "datastore2",
+        vm_network: "VM Network",
+        vm_netmask: "24",
+        vm_gateway: "192.168.130.254",
+        vm_linkedClone: "false",
+        vm_dns: "8.8.8.8",
+        vm_domain: "localhost",
+        vm_timeout: "20",
+        wait_create_vm: "300s",
+        vm_ip: "192.168.130.249",
+        vm_disk: [100, 60, 60],
+        vm_cpu: 2,
+        vm_ram: 2048,
+        vm_name: "iac-szxd-oracle11g",
+        db_name: "szxd",
+        db_character: "UTF8",
+        db_collate: "utf8_general_ci",
+        db_user: "chita",
+        db_password: "Cc123!@#",
+        db_port: "33066",
+        db_schema: "",
+      },
+      fixed_value: this.fixedValue,
+      text: this.attrText,
+      type: this.type,
+      status: CellStatus.DEFAULT,
+    };
+  }
+}
+
 export class PostgresqlProps implements NodeProp {
-  readonly icon = PostgresqlPropsIcon;
+  readonly icon = PostgresqlIcon;
   readonly type = NodeType.POSTGRESQL;
   readonly fixedValue =
     // new Set<string>(["name", "source", "zh_name", "module_type", "kubernetes"]);
@@ -178,6 +279,7 @@ export class PostgresqlProps implements NodeProp {
     };
   }
 }
+
 
 export class MongodbProps implements NodeProp {
   readonly icon = RedisClusterIcon;
