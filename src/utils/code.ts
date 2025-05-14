@@ -42,14 +42,15 @@ export const generate = async () => {
       );
     });
     // 2.2 生成当前结点对应的 terraform 代码
-    generateModuleCode(nodeData.module, builder, dependency);
+    const success = generateModuleCode(nodeData.module, builder, dependency);
     // 2.3 延时关闭边动画并设置结点状态
     setTimeout(() => {
-      nodeData.status = CellStatus.SUCCESS;
+      nodeData.status = success? CellStatus.SUCCESS : CellStatus.ERROR;
       outgoingEdges?.forEach((edge) => {
         stopAnimate(edge, node);
       });
     }, 600);
+    if (!success) continue;
     // 2.4 遍历子结点
     graph.getIncomingEdges(node)?.forEach((edge) => {
       // 2.4.1 开启边动画
@@ -93,7 +94,7 @@ export const generate = async () => {
   return;
 };
 
-const generateHelper = (module: any, builder: CodeBuilder, level: number) => {
+const generateHelper = (module: any, builder: CodeBuilder, level: number): boolean => {
   Object.keys(module).forEach((key) => {
     if (key !== "name") {
       builder.indent(level);
@@ -113,25 +114,29 @@ const generateHelper = (module: any, builder: CodeBuilder, level: number) => {
         builder.append(key).append(" = ").append(module[key].value);
       } else if (typeof module[key] === "object") {
         builder.append(key).append(" = {").newLine();
-        generateHelper(module[key], builder, level + 1);
+        const success = generateHelper(module[key], builder, level + 1);
+        if (!success) return false;
         builder.indent(level).append("}");
       } else {
         message.error(
           "不支持的类型 " + key + ": " + JSON.stringify(module[key])
         );
+        return false;
       }
       builder.newLine();
     }
   });
+  return true;
 };
 
 const generateModuleCode = (
   module: any,
   builder: CodeBuilder,
   dependency: string[]
-) => {
+): boolean => {
   builder.append('module "').append(module.name).append('" {').newLine();
-  generateHelper(module, builder, 1);
+  const success = generateHelper(module, builder, 1);
+  if (!success) return false;
   if (dependency.length > 0) {
     builder.indent(1).append("depends_on = [");
     let sep = "";
@@ -142,6 +147,7 @@ const generateModuleCode = (
     builder.append("]").newLine();
   }
   builder.append("}").newLine().newLine();
+  return true;
 };
 
 class CodeBuilder {

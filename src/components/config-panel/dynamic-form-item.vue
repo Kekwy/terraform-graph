@@ -90,9 +90,18 @@ export default Vue.extend({
         :key="key"
         :label="text[key] || key"
       >
+        <!-- 布尔 -->
+        <a-switch
+          v-if="typeof model[key] === 'boolean'"
+          v-model="model[key]"
+          :disabled="fixed.has(key) || disabled"
+        >
+          <a-icon slot="checkedChildren" type="check" />
+          <a-icon slot="unCheckedChildren" type="close" />
+        </a-switch>
         <!-- 字符串 -->
         <a-input
-          v-if="typeof model[key] === 'string'"
+          v-else-if="typeof model[key] === 'string'"
           v-model="model[key]"
           :disabled="fixed.has(key) || disabled"
         />

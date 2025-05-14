@@ -1,12 +1,12 @@
 <script lang="ts">
-import { NodeProp, nodes } from "@/node";
+import {NodeProp, nodes} from "@/node";
 import ItemPanelItem from "@/components/item-panel/item.vue";
-import { eventBus, EventEnum } from "@/utils/event-bus";
-import { Dnd } from "@antv/x6-plugin-dnd";
-import { globalVar } from "@/store";
+import {eventBus, EventEnum} from "@/utils/event-bus";
+import {Dnd} from "@antv/x6-plugin-dnd";
+import {globalVar} from "@/store";
 import Vue from "vue";
-import { Graph } from "@antv/x6";
-import { GraphUtil } from "@/utils/graph-util";
+import {Graph} from "@antv/x6";
+import {GraphUtil} from "@/utils/graph-util";
 
 interface ComponentData {
   dnd: Dnd;
@@ -15,7 +15,7 @@ interface ComponentData {
 
 export default Vue.extend({
   name: "item-panel",
-  components: { ItemPanelItem },
+  components: {ItemPanelItem},
   methods: {
     handleGraphInitiated() {
       this.graph = globalVar.graph;
@@ -27,6 +27,9 @@ export default Vue.extend({
       const node = GraphUtil.createTmpNode(item, this.graph);
       this.dnd.start(node, event);
     },
+    handleInfiniteOnLoad() {
+
+    }
   },
   computed: {
     items(): NodeProp[] {
@@ -61,18 +64,22 @@ export default Vue.extend({
 </script>
 
 <template>
-  <a-list
-    item-layout="horizontal"
-    :data-source="items"
-    class="icon-page"
-    size="small"
+  <div
+      style="max-height: 100%; overflow-y: auto;"
   >
-    <a-list-item slot="renderItem" slot-scope="item">
-      <div @mousedown="onMousedown($event, item)" style="width: 100%">
-        <item-panel-item :item="item" />
-      </div>
-    </a-list-item>
-  </a-list>
+    <a-list
+        item-layout="horizontal"
+        :data-source="items"
+        class="icon-page"
+        size="small"
+    >
+      <a-list-item slot="renderItem" slot-scope="item">
+        <div @mousedown="onMousedown($event, item)" style="width: 100%">
+          <item-panel-item :item="item"/>
+        </div>
+      </a-list-item>
+    </a-list>
+  </div>
 </template>
 
 <style scoped>

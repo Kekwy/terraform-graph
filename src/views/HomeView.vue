@@ -35,7 +35,7 @@ export default defineComponent({
       <!--      </a-menu>-->
     </a-layout-header>
     <a-layout>
-      <a-layout-sider width="200" style="background: #fff">
+      <a-layout-sider width="220" style="background: #fff">
         <item-panel />
       </a-layout-sider>
       <a-layout style="padding: 24px">

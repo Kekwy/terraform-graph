@@ -93,7 +93,14 @@ export class OracleProps implements NodeProp {
   readonly type = NodeType.ORACLE;
   readonly fixedValue =
     // new Set<string>(["name", "source", "zh_name", "module_type", "kubernetes"]);
-    new Set<string>(["source", "zh_name", "module_type", "vsphere", "control", "db"]);
+    new Set<string>([
+      "source",
+      "zh_name",
+      "module_type",
+      "vsphere",
+      "control",
+      "db",
+    ]);
 
   readonly attrText = {
     // 对应属性在配置栏中显示的名称
@@ -383,7 +390,15 @@ export class OpenguassProps implements NodeProp {
   readonly type = NodeType.OPENGUASS;
   readonly fixedValue =
     // new Set<string>(["name", "source", "zh_name", "module_type", "kubernetes"]);
-    new Set<string>(["source", "zh_name", "module_type", "openstack", "control", "db", "instance_key_pair"]);
+    new Set<string>([
+      "source",
+      "zh_name",
+      "module_type",
+      "openstack",
+      "control",
+      "db",
+      "instance_key_pair",
+    ]);
 
   readonly attrText = {
     // 对应属性在配置栏中显示的名称
@@ -455,8 +470,7 @@ export class OpenguassProps implements NodeProp {
       text: this.attrText,
       type: this.type,
       status: CellStatus.DEFAULT,
-    }
-      ;
+    };
   }
 }
 
@@ -465,7 +479,15 @@ export class NginxProps implements NodeProp {
   readonly type = NodeType.NGINX;
   readonly fixedValue =
     // new Set<string>(["name", "source", "zh_name", "module_type", "kubernetes"]);
-    new Set<string>(["source", "zh_name", "module_type", "openstack", "control", "db", "instance_key_pair"]);
+    new Set<string>([
+      "source",
+      "zh_name",
+      "module_type",
+      "openstack",
+      "control",
+      "db",
+      "instance_key_pair",
+    ]);
 
   readonly attrText = {
     // 对应属性在配置栏中显示的名称
@@ -517,16 +539,19 @@ export class NginxProps implements NodeProp {
       text: this.attrText,
       type: this.type,
       status: CellStatus.DEFAULT,
-    }
-      ;
+    };
   }
 }
 
 export class NamespaceProps implements NodeProp {
   readonly icon = KubernetesIcon;
   readonly type = NodeType.NAMESPACE;
-  readonly fixedValue =
-    new Set<string>(["source", "zh_name", "module_type", "kubernetes"]);
+  readonly fixedValue = new Set<string>([
+    "source",
+    "zh_name",
+    "module_type",
+    "kubernetes",
+  ]);
 
   readonly attrText = {
     // 对应属性在配置栏中显示的名称
@@ -673,8 +698,12 @@ export class KafkaZookeeperProps implements NodeProp {
 export class EsKiProps implements NodeProp {
   readonly icon = DefaultIcon;
   readonly type = NodeType.ES_KI;
-  readonly fixedValue =
-    new Set<string>(["source", "zh_name", "module_type", "kubernetes"]);
+  readonly fixedValue = new Set<string>([
+    "source",
+    "zh_name",
+    "module_type",
+    "kubernetes",
+  ]);
 
   readonly attrText = {
     // 对应属性在配置栏中显示的名称
@@ -752,11 +781,16 @@ export class EsKiProps implements NodeProp {
 }
 
 export class AbcProps implements NodeProp {
-  readonly icon = RedisClusterIcon;
-  readonly type = NodeType.REDIS_CLUSTER;
-  readonly fixedValue =
-    // new Set<string>(["name", "source", "zh_name", "module_type", "kubernetes"]);
-    new Set<string>(["source", "zh_name", "module_type", "kubernetes", "index", "parent"]);
+  readonly icon = KubernetesIcon;
+  readonly type = NodeType.ABC;
+  readonly fixedValue = new Set<string>([
+    "source",
+    "zh_name",
+    "module_type",
+    "kubernetes",
+    "index",
+    "parent",
+  ]);
 
   readonly attrText = {
     // 对应属性在配置栏中显示的名称
@@ -764,7 +798,7 @@ export class AbcProps implements NodeProp {
     source: "组件入口位置",
     zh_name: "中文名称",
     module_type: "module 类型",
-    index : "层级",
+    index: "层级",
     parent: "引用目标",
     kubernetes: "平台连接信息",
     namespace: "pod 的命名空间名称",
@@ -784,7 +818,8 @@ export class AbcProps implements NodeProp {
     containerCommand: "pod 的命令",
     containerArgs: "pod 的参数",
     livenessProbe_enable: "是否创建 liveness 探针",
-    livenessProbe_failureThreshold: "探针当 Pod 成功启动且检查失败时，将在放弃之前尝试的次数",
+    livenessProbe_failureThreshold:
+      "探针当 Pod 成功启动且检查失败时，将在放弃之前尝试的次数",
     livenessProbe_initialDelaySeconds: "容器启动和探针启动之间的秒数",
     livenessProbe_periodSeconds: "探针检查的频率（以秒为单位）",
     livenessProbe_successThreshold: "探针失败后检查成功的最小连续成功次数",
@@ -794,7 +829,8 @@ export class AbcProps implements NodeProp {
     livenessProbe_path: "探针探测路径（httpget 方式，默认为空）",
     livenessProbe_scheme: "探针模式（没有则填空）",
     readinessProbe_enable: "是否创建 readiness 探针",
-    readinessProbe_failureThreshold: "探针当 Pod 成功启动且检查失败时，将在放弃之前尝试的次数",
+    readinessProbe_failureThreshold:
+      "探针当 Pod 成功启动且检查失败时，将在放弃之前尝试的次数",
     readinessProbe_initialDelaySeconds: "容器启动和探针启动之间的秒数",
     readinessProbe_periodSeconds: "探针检查的频率（以秒为单位）",
     readinessProbe_successThreshold: "探针失败后检查成功的最小连续成功次数",
@@ -808,28 +844,149 @@ export class AbcProps implements NodeProp {
     init_containerImage: "初始化容器镜像",
     init_name: "初始化容器名称",
     init_volumeMounts: "初始化容器挂载（没有则填空）",
-    volumeMounts: "pod 的命名空间名称",
-    volumes: "pod 的命名空间名称",
-    ingress_enable: "pod 的命名空间名称",
-    hostname: "pod 的命名空间名称",
-    annotations: "pod 的命名空间名称",
-    paths: "pod 的命名空间名称",
-    ingress_tls: "pod 的命名空间名称",
-    configmap_enable: "pod 的命名空间名称",
-    config_file: "pod 的命名空间名称",
-    config_data: "pod 的命名空间名称",
-    secret_enable: "pod 的命名空间名称",
-    secret_data: "pod 的命名空间名称",
-    secret_name: "pod 的命名空间名称",
-    secret_label: "pod 的命名空间名称",
-    env_type: "pod 的命名空间名称",
-    env: "pod 的命名空间名称",
-    env_from: "pod 的命名空间名称",
+    volumeMounts: "pod 容器挂载（没有则填空）",
+    volumes: "pod 挂载（没有则填空）",
+    ingress_enable: "是否添加 ingress",
+    hostname: "ingress 的 host 名称",
+    annotations: "ingress 的配置",
+    paths: "ingress 的 path 情况",
+    ingress_tls: "ingress 的 tls 协议",
+    configmap_enable: "是否创建 configmap",
+    config_file: "configmap 的配置文件",
+    config_data: "configmap 的配置信息",
+    secret_enable: "是否创建 secret",
+    secret_data: "secret 的内容",
+    secret_name: "secret 的名称",
+    secret_label: "secret 的标签",
+    env_type: "env 的类型",
+    env: "pod 的环境变量",
+    env_from: "env 的来源",
   };
 
   data(): NodeData {
     return {
-      module: {},
+      module: {
+        name: "",
+        source: "./modules/k8s/pod/",
+        zh_name: "",
+        module_type: "microservice",
+        index: "3",
+        parent: "-",
+        kubernetes: {
+          host: new Variable("var.kubernetes.host"),
+          client_certificate: new Variable("var.kubernetes.client_certificate"),
+          client_key: new Variable("var.kubernetes.client_key"),
+          cluster_ca_certificate: new Variable(
+            "var.kubernetes.cluster_ca_certificate"
+          ),
+        },
+        namespace: new Variable("var.kubernetes_namespace"),
+        replicas: 1,
+        containerPort: [{ name: "http", port: "8080" }],
+        limitsCpu: "2000m",
+        limitsMemory: "8000Mi",
+        requestsCpu: "1000m",
+        requestsMemory: "2000Mi",
+        svc_enable: true,
+        svcType: "ClusterIP",
+        svc: [
+          {
+            name: "http",
+            svcPort: "8080",
+            svcTargetPort: "8080",
+            nodePort: "",
+          },
+        ],
+        svc_clusterip: "",
+        hostAliases: [],
+        metadataName: "abc",
+        containerImage: "hub.js.sgcc.com.cn/qiguanyu/abc:1.1.10",
+        containerCommand: [],
+        containerArgs: [],
+        livenessProbe_enable: true,
+        livenessProbe_failureThreshold: 3,
+        livenessProbe_initialDelaySeconds: 240,
+        livenessProbe_periodSeconds: 10,
+        livenessProbe_successThreshold: 1,
+        livenessProbe_timeoutSeconds: 3,
+        livenessProbe_type: "tcpSocket",
+        livenessProbe_port: 8080,
+        livenessProbe_path: "",
+        livenessProbe_scheme: "HTTP",
+        readinessProbe_enable: true,
+        readinessProbe_failureThreshold: 10,
+        readinessProbe_initialDelaySeconds: 200,
+        readinessProbe_periodSeconds: 10,
+        readinessProbe_successThreshold: 1,
+        readinessProbe_timeoutSeconds: 1,
+        readinessProbe_type: "tcpSocket",
+        readinessProbe_port: 3000,
+        readinessProbe_path: "",
+        readinessProbe_scheme: "HTTP",
+        init_container_enable: false,
+        init_containerCommand: ["/bin/sh", "-c"],
+        init_containerImage: "abc/edf:1.1.1",
+        init_name: "agent",
+        init_volumeMounts: [{ name: "agent", path: "/agent" }],
+        volumeMounts: [
+          { name: "abc", mountPath: "/home/config", subPath: "config" },
+          { name: "abc", mountPath: "/home/", subPath: "" },
+        ],
+        volumes: [
+          { name: "abc", type: "configMap", configmap_name: "abc" },
+          {
+            name: "abc",
+            type: "persistentVolumeClaim",
+            claimName: "wldaxt-pvc",
+          },
+          { name: "abc", type: "hostPath", path: "/root/.kube" },
+        ],
+        ingress_enable: true,
+        hostname: "",
+        annotations: {
+          "kubernetes.io/ingress.class": "jiangning3-ingress",
+          "nginx.ingress.kubernetes.io/affinity": "cookie",
+          "nginx.ingress.kubernetes.io/session-cookie-hash": "sha1",
+          "nginx.ingress.kubernetes.io/session-cookie-name": "INGRESSCOOKIE",
+          "nginx.ingress.kubernetes.io/ssl-redirect": "false",
+          "nginx.ingress.kubernetes.io/upstream-hash-by": "sticky",
+          "nginx.ingress.kubernetes.io/proxy-body-size": "50M",
+        },
+        paths: [
+          { path: "/daxt-admin", serviceName: "abc", servicePort: "8080" },
+        ],
+        ingress_tls: [
+          { tls_hosts: ["abc.com.cn"], tls_secret_name: "abc.com.cn" },
+        ],
+        configmap_enable: true,
+        config_file: [
+          { key: "application.yml", file: "abc-application.yml" },
+          { key: "application-prod.yml", file: "abc-application-prod.yml" },
+        ],
+        config_data: [
+          { key: "DRONE_NAMESPACE_DEFAULT", value: "custom-namespace" },
+          { key: "DRONE_RPC_HOST", value: "custom-drone:80" },
+          { key: "DRONE_RPC_PROTO", value: "https" },
+          { key: "DRONE_RPC_SECRET", value: "new_secret" },
+          {
+            key: "DRONE_IMAGE_PLACEHOLDER",
+            value: "hub.js.sgcc.com.cn/yingxiaoyu/custom-placeholder:1.1.1",
+          },
+        ],
+        secret_enable: false,
+        secret_data: [
+          { key: "dbHost", value: "MjAuNDYuMTIxLjExNA=:" },
+          { key: "dbPort", value: "MTU0MzI=" },
+          { key: "dbUser", value: "ZG10Zw==" },
+          { key: "dbPassword", value: "YUQzJCNHSGNSVk9yQ2Ux" },
+          { key: "dbDatabase", value: "ZG10Z3Bn" },
+        ],
+        secret_name: "dmtg-server-db",
+        secret_label: "postgres",
+        env_type: "",
+        env: [],
+        env_from: [],
+      },
       fixed_value: this.fixedValue,
       text: this.attrText,
       type: this.type,

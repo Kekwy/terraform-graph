@@ -14,6 +14,7 @@ import {
   List,
   Menu,
   Select,
+  Switch,
   Tabs,
   Tag,
   Tooltip,
@@ -59,6 +60,8 @@ const initAntd = () => {
   // a-descriptions
   Vue.component("ADescriptions", Descriptions);
   Vue.component("ADescriptionsItem", Descriptions.Item);
+  // a-switch
+  Vue.component("ASwitch", Switch);
 };
 
 export default initAntd;

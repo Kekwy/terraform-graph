@@ -4,6 +4,7 @@ import { register } from "@antv/x6-vue-shape";
 import { RedisProp } from "@/node/redis-props";
 import { MySQLProp } from "@/node/mysql-props";
 import {
+  AbcProps,
   EsKiProps,
   KafkaZookeeperProps,
   MongodbProps,
@@ -72,6 +73,7 @@ export const nodes = new Map<NodeType, NodeProp>([
   [NodeType.NAMESPACE, new NamespaceProps()],
   [NodeType.KAFKA_ZOOKEEPER, new KafkaZookeeperProps()],
   [NodeType.ES_KI, new EsKiProps()],
+  [NodeType.ABC, new AbcProps()],
 ]);
 
 export class Variable {
