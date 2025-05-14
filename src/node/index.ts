@@ -3,7 +3,17 @@ import DeploymentDagNode from "@/components/deployment-dag-node/index.vue";
 import { register } from "@antv/x6-vue-shape";
 import { RedisProp } from "@/node/redis-props";
 import { MySQLProp } from "@/node/mysql-props";
-import {OracleProps, PostgresqlProps, RedisClusterProps} from "@/node/props";
+import {
+  EsKiProps,
+  KafkaZookeeperProps,
+  MongodbProps,
+  NamespaceProps,
+  NginxProps,
+  OpenguassProps,
+  OracleProps,
+  PostgresqlProps,
+  RedisClusterProps
+} from "@/node/props";
 
 // 元素校验状态
 export enum CellStatus {
@@ -56,6 +66,12 @@ export const nodes = new Map<NodeType, NodeProp>([
   [NodeType.REDIS_CLUSTER, new RedisClusterProps()],
   [NodeType.ORACLE, new OracleProps()],
   [NodeType.POSTGRESQL, new PostgresqlProps()],
+  [NodeType.MONGODB, new MongodbProps()],
+  [NodeType.OPENGUASS, new OpenguassProps()],
+  [NodeType.NGINX, new NginxProps()],
+  [NodeType.NAMESPACE, new NamespaceProps()],
+  [NodeType.KAFKA_ZOOKEEPER, new KafkaZookeeperProps()],
+  [NodeType.ES_KI, new EsKiProps()],
 ]);
 
 export class Variable {
