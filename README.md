@@ -12,6 +12,8 @@
 
 ![image-20250514150542084](./README.assets/image-20250514150542084.png)
 
+![Alt](https://repobeats.axiom.co/api/embed/3eaa5b6a254bb54dc88dc4cf38b45e9b4af5a3aa.svg "Repobeats analytics image")
+
 ## 快速开始
 
 ```shell
